@@ -81,10 +81,12 @@ $tasks = [
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
+                    <?php foreach ($projects as $val): ?>
                         <li class="main-navigation__list-item">
-                            <a class="main-navigation__list-item-link" href="#">Название проекта</a>
+                            <a class="main-navigation__list-item-link" href="#"><?= $val ?></a>
                             <span class="main-navigation__list-item-count">0</span>
                         </li>
+                    <?php endforeach; ?>
                     </ul>
                 </nav>
 
