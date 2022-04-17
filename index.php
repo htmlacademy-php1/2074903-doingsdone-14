@@ -40,14 +40,23 @@ $tasks = [
         'done' => false
     ]
 ];
-function count_tasks (array $tasks, $project) {
+/**
+* Counts the number of tasks in the project/category
+*
+* @param array $tasks Array with iterable tasks
+* @param $project Project/category under review
+* @param $task['category'] The key by which the tasks are checked
+*
+* @return int $count The calculated number of tasks in the selected project
+*/
+function count_tasks(array $tasks, $project) {
     $count = 0;
     foreach ($tasks as $task) {
         if ($task['category'] === $project) {
             $count++;}
 		}
         return ($count);
-		};
+	};
 ?>
 <!DOCTYPE html>
 <html lang="ru">
