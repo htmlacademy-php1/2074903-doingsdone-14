@@ -83,11 +83,10 @@ function include_template($name, array $data = []) {
 
 $page_content = include_template('main.php', [
     'tasks' => $tasks,
-    'projects' => $projects]);
+    'projects' => $projects,
+    'show_complete_tasks' => $show_complete_tasks]);
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
-    'tasks' => $tasks,
-    'projects' => $projects,
     'title' => 'Дела в порядке']);
 
 print($layout_content);
