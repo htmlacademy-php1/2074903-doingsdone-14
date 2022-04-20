@@ -46,12 +46,12 @@ date_default_timezone_set('Europe/Moscow');
 /**
 * Determines whether the task is hot or not
 *
-* @param array $tasks Array with iterable tasks
+* @param string $task The concrete task from our array
 *
 * @return bool $is_hot Shows whether there are 24 or less hours left before the task or not
 */
 function is_hot ($task) {
-    if (isset($task['deadline'])) {
+    if (isset($task['deadline']) and !$task['done']) {
         $task_ts = strtotime($task['deadline']);
         $ts_diff = $task_ts - time();
         $hours = floor($ts_diff / 3600);
