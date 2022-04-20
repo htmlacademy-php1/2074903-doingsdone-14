@@ -40,12 +40,35 @@ $tasks = [
         'done' => false
     ]
 ];
+
+date_default_timezone_set('Europe/Moscow');
+
+/**
+* Determines whether the task is hot or not
+*
+* @param string $task The concrete task from our array
+*
+* @return bool $is_hot Shows whether there are 24 or less hours left before the task or not
+*/
+function is_hot ($task) {
+    if (isset($task['deadline']) and !$task['done']) {
+        $task_ts = strtotime($task['deadline']);
+        $ts_diff = $task_ts - time();
+        $hours = floor($ts_diff / 3600);
+        if ($hours <= 24) {
+            $is_hot = true;
+        };
+    } else {
+        $is_hot = false;
+    };
+    return ($is_hot);
+};
+
 /**
 * Counts the number of tasks in the project/category
 *
 * @param array $tasks Array with iterable tasks
-* @param $project Project/category under review
-* @param $task['category'] The key by which the tasks are checked
+* @param string $project Project/category under review
 *
 * @return int $count The calculated number of tasks in the selected project
 */
@@ -58,28 +81,7 @@ function count_tasks(array $tasks, $project) {
         return ($count);
 };
 
-/**
- * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
- * @param string $name Путь к файлу шаблона относительно папки templates
- * @param array $data Ассоциативный массив с данными для шаблона
- * @return string Итоговый HTML
- */
-function include_template($name, array $data = []) {
-    $name = 'templates/' . $name;
-    $result = '';
-
-    if (!is_readable($name)) {
-        return $result;
-    }
-
-    ob_start();
-    extract($data);
-    require $name;
-
-    $result = ob_get_clean();
-
-    return $result;
-};
+require_once('helpers.php');
 
 $page_content = include_template('main.php', [
     'tasks' => $tasks,
@@ -90,4 +92,6 @@ $layout_content = include_template('layout.php', [
     'title' => 'Дела в порядке']);
 
 print($layout_content);
+
+
 ?>
