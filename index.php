@@ -40,6 +40,30 @@ $tasks = [
         'done' => false
     ]
 ];
+
+date_default_timezone_set('Europe/Moscow');
+
+/**
+* Determines whether the task is hot or not
+*
+* @param array $tasks Array with iterable tasks
+*
+* @return bool $is_hot Shows whether there are 24 or less hours left before the task or not
+*/
+function is_hot ($task) {
+    if (isset($task['deadline'])) {
+        $task_ts = strtotime($task['deadline']);
+        $ts_diff = $task_ts - time();
+        $hours = floor($ts_diff / 3600);
+        if ($hours <= 24) {
+            $is_hot = true;
+        };
+    } else {
+        $is_hot = false;
+    };
+    return ($is_hot);
+};
+
 /**
 * Counts the number of tasks in the project/category
 *
@@ -68,4 +92,6 @@ $layout_content = include_template('layout.php', [
     'title' => 'Дела в порядке']);
 
 print($layout_content);
+
+
 ?>
