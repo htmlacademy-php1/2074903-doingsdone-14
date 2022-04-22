@@ -1,6 +1,6 @@
 CREATE DATABASE business_is_good
-DEFAULT CHARACTER SET utf8
-DEFAULT COLLATE utf8_general_ci;
+    DEFAULT CHARACTER SET utf8
+    DEFAULT COLLATE utf8_general_ci;
 
 USE business_is_good;
 
