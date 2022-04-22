@@ -57,8 +57,8 @@ function is_hot ($task) {
         if ($hours <= 24) {
             $is_hot = true;
         };
+        return ($is_hot);
     };
-    return ($is_hot);
 };
 
 /**
