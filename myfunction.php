@@ -5,10 +5,10 @@
 * @param string $t The concrete task from our array $tasks
 * @return bool $is_hot Shows whether there are 24 or less hours left before the task or not
 */
-function is_hot ($t) {
-    if (isset($t['dt_deadline']) and !$t['status']) {
-        $t_ts = strtotime($t['dt_deadline']);
-        $ts_diff = $t_ts - time();
+function is_hot ($task) {
+    if (isset($task['dt_deadline']) and !$task['status']) {
+        $task_ts = strtotime($task['dt_deadline']);
+        $ts_diff = $task_ts - time();
         $hours = floor($ts_diff / 3600);
         return ($hours <= 24);
     }
