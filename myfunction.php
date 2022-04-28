@@ -25,7 +25,8 @@ function count_tasks(array $tasks, $project) {
     $count = 0;
     foreach ($tasks as $task) {
         if ($task['category'] === $project) {
-            $count++;}
+            $count++;
+        }
     }
-        return ($count);
+    return ($count);
 };
