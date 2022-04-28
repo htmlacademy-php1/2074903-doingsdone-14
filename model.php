@@ -1,9 +1,6 @@
 <?php
-if (!$con) {
-    $error = mysqli_connect_error();
-    $content = print('Ошибка подключения: '.$error);
-}
-else {
+
+if ($con) {
 //Получим из таблицы проектов массив для пользователя с id=2 id, именем проекта и подсчетом задач по этому проекту из таблицы задач
     $sql = 'SELECT p.id, p.name, COUNT(t.name) AS count '
                 .'FROM projects p '
