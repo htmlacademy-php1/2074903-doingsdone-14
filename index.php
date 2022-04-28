@@ -7,6 +7,9 @@ require_once('model.php');
 require_once('helpers.php');
 require_once('myfunction.php');
 
+$projects = get_projects($con);
+$tasks = get_tasks($con);
+
 $page_content = include_template('main.php', [
     'tasks' => $tasks,
     'projects' => $projects,
