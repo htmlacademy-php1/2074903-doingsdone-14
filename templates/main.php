@@ -5,8 +5,8 @@
         <ul class="main-navigation__list">
         <?php foreach ($projects as $project): ?>
             <li class="main-navigation__list-item">
-                <a class="main-navigation__list-item-link" href="#"><?= htmlspecialchars($project) ?></a>
-                <span class="main-navigation__list-item-count"><?= count_tasks($tasks, $project) ?></span>
+                <a class="main-navigation__list-item-link" href="#"><?= htmlspecialchars($project['name']) ?></a>
+                <span class="main-navigation__list-item-count"><?= $project['count']; ?></span>
             </li>
         <?php endforeach; ?>
         </ul>
@@ -43,21 +43,23 @@
 
     <table class="tasks">
     <?php foreach ($tasks as $task): ?>
-        <?php if (!$show_complete_tasks and $task['done']): continue ?><?php endif; ?>
-        <tr class="tasks__item task <?php if ($task['done']): ?>task--completed<?php endif; ?> <?php if (is_hot($task)): ?>task--important<?php endif; ?>">
+        <?php if (!$show_complete_tasks and $task['status']): continue ?><?php endif; ?>
+        <tr class="tasks__item task <?php if ($task['status']): ?>task--completed<?php endif; ?> <?php if (is_hot($task)): ?>task--important<?php endif; ?>">
             <td class="task__select">
                 <label class="checkbox task__checkbox">
                     <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-                    <span class="checkbox__text"><?= htmlspecialchars($task['to_do']); ?></span>
+                    <span class="checkbox__text"><?= htmlspecialchars($task['name']); ?></span>
                 </label>
             </td>
 
             <td class="task__file">
-                <a class="download-link" href="#"></a>
+                <?php if (isset($task['file'])): ?>
+                <a class="download-link" href="#"><?= $task['file'] ?></a>
+                <?php endif; ?>
             </td>
 
-            <?php if (isset($task['deadline'])): ?>
-            <td class="task__date"><?= htmlspecialchars($task['deadline']); ?></td>
+            <?php if (isset($task['dt_deadline'])): ?>
+            <td class="task__date"><?= $task['dt_deadline']; ?></td>
             <?php endif; ?>
         </tr>
     <?php endforeach; ?>
