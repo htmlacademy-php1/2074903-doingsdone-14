@@ -30,3 +30,17 @@ function count_tasks(array $tasks, $project) {
     }
     return ($count);
 };
+
+/**
+ * In a request to the database, it creates an array based on the response or returns an error
+ *
+ * @param object $result response from our database to our request
+ * @return string about our error or our array
+ */
+function array_or_error(object $result) {
+    if (!$result) {
+        return print('Ошибка запроса');
+    } else {
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+}

@@ -14,13 +14,7 @@ if ($con) {
                     .'WHERE p.user_id = 2 '
                     .'GROUP BY p.id';
         $result = mysqli_query($con, $sql);
-            if (!$result) {
-                $error = mysqli_error($con);
-                $content = print('Ошибка: '.$error);
-            } else {
-                $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                return ($projects);
-            }
+        return array_or_error($result);
     };
 
     /**
@@ -33,12 +27,6 @@ if ($con) {
         $sql = 'SELECT id, name, status, DATE_FORMAT(dt_deadline, "%d.%m.%Y") as dt_deadline, file FROM tasks '
                     .'WHERE user_id = 2';
         $result = mysqli_query($con, $sql);
-            if (!$result) {
-                $error = mysqli_error($con);
-                $content = print('Ошибка: '.$error);
-            } else {
-                $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                return ($tasks);
-            }
+        return array_or_error($result);
     };
 }
