@@ -19,13 +19,16 @@ $page_content = check_tasks_for_project($project_id, $projects_ids, $tasks);
 if (empty($page_content)) {
     $page_content = include_template('main.php', [
         'tasks' => $tasks,
-        'projects' => $projects,
-        'show_complete_tasks' => $show_complete_tasks,
-        'project_id' => $project_id]);
+        'show_complete_tasks' => $show_complete_tasks]);
 }
 
+$navigation_content = include_template('navigation.php', [
+    'projects' => $projects,
+    'project_id' => $project_id,
+    'content' => $page_content]);
+
 $layout_content = include_template('layout.php', [
-    'content' => $page_content,
+    'navigation' => $navigation_content,
     'title' => 'Дела в порядке']);
 
 print($layout_content);

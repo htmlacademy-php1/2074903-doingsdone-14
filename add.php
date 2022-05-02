@@ -4,6 +4,8 @@ require_once('model.php');
 require_once('helpers.php');
 require_once('myfunction.php');
 
+$project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
+
 $projects = get_projects($con);
 $projects_ids = array_column($projects, 'id');
 
@@ -39,13 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = array_filter($errors);
 
     if (!empty($_FILES['file']['name'])) {
-        if (validate_filesize($_FILES['name'], 2097152)) {
-            $errors['file'] = validate_filesize($_FILES['name'], 2097152);
+        $tmp_name = $_FILES['file']['tmp_name'];
+        if (validate_filesize($tmp_name, $max_size_limit)) {
+            $errors['file'] = validate_filesize($tmp_name, $max_size_limit);
         } else {
-            $tmp_name = $_FILES['file']['tmp_name'];
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_type = finto_file($finfo, $tmp_name);
-            $file_name = uniqid() . '.$file_type';
+            $file_type = finfo_file($finfo, $tmp_name);
+            $file_name = uniqid() . ".$file_type";
             move_uploaded_file($tmp_name, 'uploads/' . $file_name);
             $task['file'] = $file_name;
         }
@@ -53,11 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (count($errors)) {
         $page_content = include_template('add-task.php', [
-            'projects' => $projects,
             'task' => $task,
+            'projects' => $projects,
             'errors' => $errors]);
     } else {
-        $sql = 'INSERT INTO tasks (dt_add, user_id, name, project_id, dt_deadline, file, status) VALUES (NOW(), 2, ?, ?, ?, 0)';
+        $sql = 'INSERT INTO tasks (dt_add, user_id, name, project_id, dt_deadline, file, status) VALUES (NOW(), 2, ?, ?, ?, ?, 0)';
         $stmt = db_get_prepare_stmt($con, $sql, $task);
         $result = mysqli_stmt_execute($stmt);
 
@@ -71,8 +73,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $page_content = include_template('add-task.php', ['projects' => $projects]);
 }
 
+$navigation_content = include_template('navigation.php', [
+    'projects' => $projects,
+    'project_id' => $project_id,
+    'content' => $page_content]);
+
 $layout_content = include_template('layout.php', [
-    'content' => $page_content,
+    'navigation' => $navigation_content,
     'title' => 'Дела в порядке']);
 
 print($layout_content);
