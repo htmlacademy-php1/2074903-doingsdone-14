@@ -67,4 +67,71 @@ function code_404($project_id, array $projects, array $tasks) {
             return ($page_content);
         }
     }
-}
+};
+
+/**
+ * Check to exist sent project in our form to add tasks
+ *
+ * @param int $id - our id to check
+ * @param $allowed_list - an id column of our exist projects
+ * @return string about error
+ */
+function validate_project($id, $allowed_list) {
+    if (!in_array($id, $allowed_list)) {
+        return 'Указан несуществующий проект';
+    }
+    return null;
+};
+
+/**
+ * Check null of a task name in out form to add tasks
+ *
+ * @param string $name - the name of task
+ * @return string about error
+ */
+function validate_name($name) {
+    if (!$name) {
+        return 'Название задачи не может быть пустым';
+    }
+    return null;
+};
+
+/**
+ * Check date of task deadline to send right format and to be not earlier than today
+ *
+ * @param string $date - sent date of deadline
+ * @return string about errors
+ */
+function validate_date($date) {
+    if (!is_date_valid($date)) {
+        return 'Указан неверный формат даты';
+    };
+    $task_ts = strtotime($date);
+    $ts_diff = $task_ts - time();
+    if ($ts_diff < 0) {
+        return 'Указана устаревшая дата';
+    }
+    return null;
+};
+
+/**
+ * Return sent value from our from to add tasks
+ * @param string $name - name of sent value
+ * @return string sent value
+ */
+function get_post_value($name) {
+    return filter_input(INPUT_POST, $name);
+};
+
+/**
+ * Check size of upload files
+ * @param $name - our file
+ * @param $$max_size_limit our max size for upload files
+ * @return string about error
+ */
+function validate_filesize($name, $max_size_limit) {
+    if (filesize($name) > $max_size_limit) {
+        return 'Размер файла превышает допустимый';
+    }
+    return null;
+};
