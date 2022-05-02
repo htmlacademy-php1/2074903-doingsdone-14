@@ -15,23 +15,6 @@ function is_hot ($task) {
 };
 
 /**
-* Counts the number of tasks in the project/category
-*
-* @param array $tasks Array with iterable tasks
-* @param string $project Project/category under review
-* @return int $count The calculated number of tasks in the selected project
-*/
-function count_tasks(array $tasks, $project) {
-    $count = 0;
-    foreach ($tasks as $task) {
-        if ($task['category'] === $project) {
-            $count++;
-        }
-    }
-    return ($count);
-};
-
-/**
  * In a request to the database, it creates an array based on the response or returns an error
  *
  * @param object $result response from our database to our request
@@ -53,9 +36,11 @@ function array_or_error(object $result) {
  * @return string about error with code 404
  */
 function check_tasks_for_project($project_id, $projects_ids, array $tasks) {
-    if (!in_array($project_id, $projects_ids) OR empty($tasks)) {
-        http_response_code(404);
-        return 'Ошибка 404. Страница, которую Вы ищете, не может быть найдена';
+    if (!empty($project_id)) {
+        if (!in_array($project_id, $projects_ids) OR empty($tasks)) {
+            http_response_code(404);
+            return 'Ошибка 404. Страница, которую Вы ищете, не может быть найдена';
+        }
     }
 };
 
