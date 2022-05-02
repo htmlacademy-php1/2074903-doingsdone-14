@@ -10,9 +10,11 @@ require_once('myfunction.php');
 $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
 
 $projects = get_projects($con);
+$projects_ids = array_column($projects, 'id');
+
 $tasks = get_tasks($con, $project_id);
 
-$page_content = code_404($project_id, $projects, $tasks);
+$page_content = check_tasks_for_project($project_id, $projects_ids, $tasks);
 
 if (empty($page_content)) {
     $page_content = include_template('main.php', [
