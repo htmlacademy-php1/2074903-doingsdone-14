@@ -7,13 +7,21 @@ require_once('model.php');
 require_once('helpers.php');
 require_once('myfunction.php');
 
-$projects = get_projects($con);
-$tasks = get_tasks($con);
+$project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
 
-$page_content = include_template('main.php', [
-    'tasks' => $tasks,
-    'projects' => $projects,
-    'show_complete_tasks' => $show_complete_tasks]);
+$projects = get_projects($con);
+$tasks = get_tasks($con, $project_id);
+
+$page_content = code_404($project_id, $projects, $tasks);
+
+if (empty($page_content)) {
+    $page_content = include_template('main.php', [
+        'tasks' => $tasks,
+        'projects' => $projects,
+        'show_complete_tasks' => $show_complete_tasks,
+        'project_id' => $project_id]);
+}
+
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'title' => 'Дела в порядке']);

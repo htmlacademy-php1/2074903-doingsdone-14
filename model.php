@@ -14,31 +14,25 @@ if ($con) {
                     .'WHERE p.user_id = 2 '
                     .'GROUP BY p.id';
         $result = mysqli_query($con, $sql);
-            if (!$result) {
-                $error = mysqli_error($con);
-                $content = print('Ошибка: '.$error);
-            } else {
-                $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                return ($projects);
-            }
+        return array_or_error($result);
     };
 
     /**
      * Create the array with tasks for user with id=2
      *
      * @param object $con Our connect to MySQL database
-     * @return array $tasks Our array of tasks
+     * @param int $project_id Identify our project
+     * @return function array_or_error
      */
-    function get_tasks(object $con):array {
-        $sql = 'SELECT id, name, status, DATE_FORMAT(dt_deadline, "%d.%m.%Y") as dt_deadline, file FROM tasks '
-                    .'WHERE user_id = 2';
+    function get_tasks(object $con, $project_id):array {
+        if (!empty($project_id)) {
+            $sql = 'SELECT id, name, status, DATE_FORMAT(dt_deadline, "%d.%m.%Y") as dt_deadline, file FROM tasks '
+                        .'WHERE user_id = 2 AND project_id =' . $project_id;
+        } else {
+            $sql = 'SELECT id, name, status, DATE_FORMAT(dt_deadline, "%d.%m.%Y") as dt_deadline, file FROM tasks '
+                        .'WHERE user_id = 2';
+        }
         $result = mysqli_query($con, $sql);
-            if (!$result) {
-                $error = mysqli_error($con);
-                $content = print('Ошибка: '.$error);
-            } else {
-                $tasks = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                return ($tasks);
-            }
+        return array_or_error($result);
     };
 }
