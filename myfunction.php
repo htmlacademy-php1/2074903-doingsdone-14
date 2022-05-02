@@ -81,12 +81,10 @@ function validate_date($date) {
     if (!is_date_valid($date)) {
         return 'Указан неверный формат даты';
     };
-    $task_ts = strtotime($date);
-    $ts_diff = $task_ts - time();
-    if ($ts_diff < 0) {
-        return 'Указана устаревшая дата';
+    if ($date >= time()) {
+        return null;
     }
-    return null;
+    return 'Указана устаревшая дата';
 };
 
 /**

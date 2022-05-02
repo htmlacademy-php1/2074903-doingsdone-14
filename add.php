@@ -47,7 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $file_type = finfo_file($finfo, $tmp_name);
-            $file_name = uniqid() . ".$file_type";
+            $type = stristr($file_type, '/');
+            $end_name = substr($type, 1);
+            $file_name = uniqid() . ".$end_name";
             move_uploaded_file($tmp_name, 'uploads/' . $file_name);
             $task['file'] = $file_name;
         }
