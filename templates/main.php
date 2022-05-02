@@ -34,12 +34,12 @@
         </td>
 
         <td class="task__file">
-            <?php if (isset($task['file'])): ?>
+            <?php if (!empty($task['file'])): ?>
             <a class="download-link" href="#"><?= $task['file'] ?></a>
             <?php endif; ?>
         </td>
 
-        <?php if (isset($task['dt_deadline'])): ?>
+        <?php if (!empty($task['dt_deadline'])): ?>
         <td class="task__date"><?= $task['dt_deadline']; ?></td>
         <?php endif; ?>
     </tr>

@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $task = filter_input_array(INPUT_POST, ['name' => FILTER_DEFAULT, 'project_id' => FILTER_DEFAULT, 'dt_deadline' => FILTER_DEFAULT], true);
 
     foreach ($task as $key => $value) {
-        if (isset($rules[$key])) {
+        if (!empty($rules[$key])) {
             $rule = $rules[$key];
             $errors[$key] = $rule($value);
         }

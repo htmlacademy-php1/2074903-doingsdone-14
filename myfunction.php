@@ -6,7 +6,7 @@
 * @return bool $is_hot Shows whether there are 24 or less hours left before the task or not
 */
 function is_hot ($task) {
-    if (isset($task['dt_deadline']) and !$task['status']) {
+    if (!empty($task['dt_deadline']) and !$task['status']) {
         $task_ts = strtotime($task['dt_deadline']);
         $ts_diff = $task_ts - time();
         $hours = floor($ts_diff / 3600);
