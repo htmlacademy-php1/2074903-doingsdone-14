@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = array_filter($errors);
 
+
     if (!empty($_FILES['file']['name'])) {
         $tmp_name = $_FILES['file']['tmp_name'];
         if (validate_filesize($tmp_name, $max_size_limit)) {
@@ -53,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             move_uploaded_file($tmp_name, 'uploads/' . $file_name);
             $task['file'] = $file_name;
         }
-    }
+    } else $task['file'] = NULL;
 
     if (count($errors)) {
         $page_content = include_template('add-task.php', [

@@ -81,7 +81,7 @@ function validate_date($date) {
     if (!is_date_valid($date)) {
         return 'Указан неверный формат даты';
     };
-    if ($date >= time()) {
+    if (strtotime($date) >= time()) {
         return null;
     }
     return 'Указана устаревшая дата';
