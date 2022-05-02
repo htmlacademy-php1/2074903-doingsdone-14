@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     ];
 
-    $task = filter_input_array(INPUT_POST, ['name' => FILTER_DEFAULT, 'project' => FILTER_DEFAULT, 'dt_deadline' => FILTER_DEFAULT], true);
+    $task = filter_input_array(INPUT_POST, ['name' => FILTER_DEFAULT, 'project_id' => FILTER_DEFAULT, 'dt_deadline' => FILTER_DEFAULT], true);
 
     foreach ($task as $key => $value) {
         if (isset($rules[$key])) {
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if (in_array($key, $required) && empty($value)) {
-            $errors[$key] = 'Поле $key надо заполнить';
+            $errors[$key] = "Поле $key надо заполнить";
         }
     }
 
@@ -43,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors['file'] = validate_filesize($_FILES['name'], 2097152);
         } else {
             $tmp_name = $_FILES['file']['tmp_name'];
-            $path = $_FILES['file']['name'];
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $file_type = finto_file($finfo, $tmp_name);
             $file_name = uniqid() . '.$file_type';
@@ -65,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result) {
             $task_id = mysqli_insert_id($con);
 
-            header("Location: /index.php");
+            header("Location: index.php");
         }
     }
 } else {

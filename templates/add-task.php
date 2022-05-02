@@ -50,12 +50,15 @@
             <label class="form__label" for="project">Проект <sup>*</sup></label>
             <?php $classname = isset($errors['project_id']) ? "form__input--error" : ""; ?>
 
-            <?php foreach ($projects as $project): ?>
+
             <select class="form__input form__input--select <?= $classname; ?>" name="project_id" id="project">
-              <option value="<?= $project['id'] ?>"
-              <?php if ($project['id'] === get_post_value('project_id')): ?>selected<?php endif; ?>><?= $project['name']; ?></option>
-            </select>
+            <?php foreach ($projects as $project): ?>
+                <option value="<?= $project['id'] ?>"<?php if ($project['id'] === get_post_value('project_id')): ?>selected<?php endif; ?>>
+                    <?= $project['name']; ?>
+                </option>
             <?php endforeach; ?>
+            </select>
+
             <?php if (isset($errors['project_id'])): ?><p class="form__message"><?= $errors['project_id']; ?></p><?php endif; ?>
           </div>
 
