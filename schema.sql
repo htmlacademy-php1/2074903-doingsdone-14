@@ -7,7 +7,7 @@ USE business_is_good;
 CREATE TABLE users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(128) NOT NULL UNIQUE,
-    password CHAR(64) NOT NULL,
+    password CHAR(255) NOT NULL,
     name VARCHAR(255),
     dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

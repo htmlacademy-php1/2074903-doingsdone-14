@@ -5,7 +5,7 @@ if ($con) {
      * Create the array with projects and counted tasks for each of them for user with id=2
      *
      * @param object $con Our connect to MySQL database
-     * @return array $projects Our array of projects
+     * @return function array_or_error
      */
     function get_projects(object $con):array {
         $sql = 'SELECT p.id, p.name, COUNT(t.name) AS count '

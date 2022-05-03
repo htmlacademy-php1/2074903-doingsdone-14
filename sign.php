@@ -12,17 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $rules =[
         'email' => function ($value) use ($emails) {
-            return validate_email($value);
+            return validate_email($value, $emails);
         },
         'password' => function ($value) {
-            return validate_password($value, $projects_ids);
+            return validate_length($value, 8, 15);
         },
         'name' => function ($value) {
             return validate_name($value);
         }
     ];
 
-    $user = filter_input_array(INPUT_POST, ['email' => FILTER_VALIDATE_EMAIL, 'password' => FILTER_DEFAULT, 'name' => FILTER_DEFAULT], true);
+    $user = filter_input_array(INPUT_POST, ['email' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT, 'name' => FILTER_DEFAULT], true);
 
     foreach ($user as $key => $value) {
         if (!empty($rules[$key])) {
@@ -37,13 +37,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = array_filter($errors);
 
-    if (count($errors)) {
+    if (empty($errors)) {
+        $email = mysqli_real_escape_string($con, $user['email']);
+        $sql = 'SELECT id FROM users WHERE email = ?';
+        $result = mysqli_query($con, $sql);
+
+        if (mysqli_num_rows($result)) {
+            $errors['email'] = 'Указан уже зарегистрированный e-mail, войдите по этому адресу или введите новый адрес';
+        }
+    } else if (count($errors)) {
         $page_content = include_template('register.php', [
             'user' => $user,
             'errors' => $errors]);
     } else {
+        $password = password_hash($user['password'], PASSWORD_DEFAULT);
         $sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?)';
-        $stmt = db_get_prepare_stmt($con, $sql, $user);
+        $stmt = db_get_prepare_stmt($con, $sql, [$user['email'], $password, $user['name']]);
         $result = mysqli_stmt_execute($stmt);
 
         if ($result) {
@@ -53,15 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 } else {
-    $page_content = include_template('add-task.php', ['projects' => $projects]);
+    $page_content = include_template('register.php');
 }
 
-$navigation_content = include_template('navigation.php', [
-    'projects' => $projects,
-    'project_id' => $project_id,
+$navigation_content = include_template('navigation-closed.php', [
     'content' => $page_content]);
 
-$layout_content = include_template('layout.php', [
+$layout_content = include_template('layout-closed.php', [
     'navigation' => $navigation_content,
     'title' => 'Дела в порядке']);
 

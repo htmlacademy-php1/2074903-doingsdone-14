@@ -116,9 +116,27 @@ function validate_filesize($name, $max_size_limit) {
  * @param array $allowed_list - an emails column of our users in database
  * @return string about error
  */
-function validate_email($email, $allowed_list) {
-    if (in_array($email, $allowed_list)) {
+function validate_email($email, $emails) {
+    if (in_array($email, $emails)) {
         return 'Указан уже зарегистрированный e-mail, войдите по этому адресу или введите новый адрес';
+    };
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return 'Введен некорректный e-mail';
     }
     return null;
 };
+
+/**
+ * Check the string to have legth between our bourders
+ * @param string $value our checked string
+ * @param int $min min number of symbols
+ * @param int $max max number of symbols
+ * @return string about error
+ */
+function validate_length ($value, $min, $max) {
+    $length = strlen($value);
+    if ($length < $min OR $length > $max) {
+        return "Указана некорректная длина: строка должна содержать от $min до $max символов";
+    }
+    return null;
+}
