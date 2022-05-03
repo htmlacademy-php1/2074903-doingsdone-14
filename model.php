@@ -35,4 +35,16 @@ if ($con) {
         $result = mysqli_query($con, $sql);
         return array_or_error($result);
     };
+
+    /**
+     * Create the array with existed emails from our database
+     *
+     * @param object $con Our connect to MySQL database
+     * @return function array_or_error
+     */
+    function get_emails(object $con): array {
+        $sql = 'SELECT email FROM users';
+        $result = mysqli_query($con, $sql);
+        return array_or_error($result);
+    };
 }
