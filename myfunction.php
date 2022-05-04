@@ -113,7 +113,7 @@ function validate_filesize($name, $max_size_limit) {
  * Check to exist sent user email in our form to sign up
  *
  * @param $email - our email to check
- * @param array $allowed_list - an emails column of our users in database
+ * @param array $emails - an emails column of our users in database
  * @return string about error
  */
 function validate_email($email, $emails) {
