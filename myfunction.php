@@ -77,7 +77,7 @@ function validate_name($name) {
  * @param string $date - sent date of deadline
  * @return string about errors
  */
-function validate_date($date) {
+function check_date($date) {
     if (!is_date_valid($date)) {
         return 'Указан неверный формат даты';
     };

@@ -19,13 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         },
         'project_id' => function ($value) use ($projects_ids) {
             return validate_project($value, $projects_ids);
-        },
-        'dt_deadline' => function ($value) {
-            return validate_date($value);
         }
     ];
 
-    $task_form = filter_input_array(INPUT_POST, ['name' => FILTER_DEFAULT, 'project_id' => FILTER_DEFAULT, 'dt_deadline' => FILTER_DEFAULT], true);
+    $task_form = filter_input_array(INPUT_POST, ['name' => FILTER_DEFAULT, 'project_id' => FILTER_DEFAULT], true);
 
     foreach ($task_form as $key => $value) {
         if (!empty($rules[$key])) {
@@ -40,6 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = array_filter($errors);
 
+    if (!empty($_FILES['dt_deadline'])) {
+        $dt_deadline = mysqli_real_escape_string($con, $_FILES['dt_deadline']);
+        $task_form['dt_deadline'] = check_date($dt_deadline);
+    } else {
+        $task_form['dt_deadline'] = NULL;
+    }
 
     if (!empty($_FILES['file']['name'])) {
         $tmp_name = $_FILES['file']['tmp_name'];
@@ -54,7 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             move_uploaded_file($tmp_name, 'uploads/' . $file_name);
             $task['file'] = $file_name;
         }
-    } else $task_form['file'] = NULL;
+    } else {
+        $task_form['file'] = NULL;
+    }
 
     if (count($errors)) {
         $page_content = include_template('add-task.php', [
