@@ -4,7 +4,8 @@ require_once('model.php');
 require_once('helpers.php');
 require_once('myfunction.php');
 
-$emails = get_emails($con);
+$users = get_users($con);
+$emails = array_column($users, 'email');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ['email', 'password', 'name'];
@@ -37,15 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = array_filter($errors);
 
-    if (empty($errors)) {
-        $email = mysqli_real_escape_string($con, $user['email']);
-        $sql = 'SELECT id FROM users WHERE email = ?';
-        $result = mysqli_query($con, $sql);
-
-        if (mysqli_num_rows($result)) {
-            $errors['email'] = 'Указан уже зарегистрированный e-mail, войдите по этому адресу или введите новый адрес';
-        }
-    } else if (count($errors)) {
+    if (count($errors)) {
         $page_content = include_template('register.php', [
             'user' => $user,
             'errors' => $errors]);

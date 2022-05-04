@@ -42,8 +42,8 @@ if ($con) {
      * @param object $con Our connect to MySQL database
      * @return function array_or_error
      */
-    function get_emails(object $con): array {
-        $sql = 'SELECT email FROM users';
+    function get_users(object $con): array {
+        $sql = 'SELECT * FROM users';
         $result = mysqli_query($con, $sql);
         return array_or_error($result);
     };
