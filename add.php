@@ -10,7 +10,7 @@ $projects = get_projects($con);
 $projects_ids = array_column($projects, 'id');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $required = ['name', 'project_id', 'dt_deadline'];
+    $required = ['name', 'project_id'];
     $errors= [];
 
     $rules =[
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = array_filter($errors);
 
-    if (!empty($_FILES['dt_deadline'])) {
+    if (!empty($_POST['dt_deadline'])) {
         $dt_deadline = mysqli_real_escape_string($con, $_FILES['dt_deadline']);
         $task_form['dt_deadline'] = check_date($dt_deadline);
     } else {
