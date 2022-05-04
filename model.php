@@ -74,4 +74,17 @@ if ($con) {
         $stmt = db_get_prepare_stmt($con, $sql, [$user_form['email'], $password, $user_form['name']]);
         return mysqli_stmt_execute($stmt);
     };
+
+    /**
+     * Give us the data of the user who logged in on our website
+     * @param object $con Our connect to MySQL database
+     * @param array $user_auth Our user date to auth on our website
+     * @return funtion array_or_error
+     */
+    function get_user(object $con, array $user_auth) {
+        $email = mysqli_real_escape_string($con, $user_auth['email']);
+        $sql = "SELECT * FROM users WHERE email = '$email'";
+        $result = mysqli_query($con, $sql);
+        return array_or_error($result);
+    };
 }

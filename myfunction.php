@@ -139,4 +139,4 @@ function validate_length ($value, $min, $max) {
         return "Указана некорректная длина: строка должна содержать от $min до $max символов";
     }
     return null;
-}
+};
