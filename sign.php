@@ -23,9 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     ];
 
-    $user = filter_input_array(INPUT_POST, ['email' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT, 'name' => FILTER_DEFAULT], true);
+    $user_form = filter_input_array(INPUT_POST, ['email' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT, 'name' => FILTER_DEFAULT], true);
 
-    foreach ($user as $key => $value) {
+    foreach ($user_form as $key => $value) {
         if (!empty($rules[$key])) {
             $rule = $rules[$key];
             $errors[$key] = $rule($value);
@@ -40,14 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (count($errors)) {
         $page_content = include_template('register.php', [
-            'user' => $user,
+            'user' => $user_form,
             'errors' => $errors]);
     } else {
-        $password = password_hash($user['password'], PASSWORD_DEFAULT);
-        $sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?)';
-        $stmt = db_get_prepare_stmt($con, $sql, [$user['email'], $password, $user['name']]);
-        $result = mysqli_stmt_execute($stmt);
-
+        $result = add_user($con, $user_form);
         if ($result) {
             $user_id = mysqli_insert_id($con);
 

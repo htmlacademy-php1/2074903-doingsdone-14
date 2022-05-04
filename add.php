@@ -25,9 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     ];
 
-    $task = filter_input_array(INPUT_POST, ['name' => FILTER_DEFAULT, 'project_id' => FILTER_DEFAULT, 'dt_deadline' => FILTER_DEFAULT], true);
+    $task_form = filter_input_array(INPUT_POST, ['name' => FILTER_DEFAULT, 'project_id' => FILTER_DEFAULT, 'dt_deadline' => FILTER_DEFAULT], true);
 
-    foreach ($task as $key => $value) {
+    foreach ($task_form as $key => $value) {
         if (!empty($rules[$key])) {
             $rule = $rules[$key];
             $errors[$key] = $rule($value);
@@ -54,18 +54,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             move_uploaded_file($tmp_name, 'uploads/' . $file_name);
             $task['file'] = $file_name;
         }
-    } else $task['file'] = NULL;
+    } else $task_form['file'] = NULL;
 
     if (count($errors)) {
         $page_content = include_template('add-task.php', [
-            'task' => $task,
+            'task' => $task_form,
             'projects' => $projects,
             'errors' => $errors]);
     } else {
-        $sql = 'INSERT INTO tasks (dt_add, user_id, name, project_id, dt_deadline, file, status) VALUES (NOW(), 2, ?, ?, ?, ?, 0)';
-        $stmt = db_get_prepare_stmt($con, $sql, $task);
-        $result = mysqli_stmt_execute($stmt);
-
+        $result = add_task($con, $task_form);
         if ($result) {
             $task_id = mysqli_insert_id($con);
 

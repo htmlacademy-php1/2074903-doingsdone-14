@@ -47,4 +47,31 @@ if ($con) {
         $result = mysqli_query($con, $sql);
         return array_or_error($result);
     };
+
+    /**
+     * Add new task in our table of tasks
+     *
+     * @param object $con Our connect to MySQL database
+     * @param array $task_form Info about new task from users
+     * @return $result
+     */
+    function add_task(object $con, array $task_form) {
+        $sql = 'INSERT INTO tasks (dt_add, user_id, name, project_id, dt_deadline, file, status) VALUES (NOW(), 2, ?, ?, ?, ?, 0)';
+        $stmt = db_get_prepare_stmt($con, $sql, $task_form);
+        return mysqli_stmt_execute($stmt);
+    };
+
+    /**
+     * Add new user in our table of users
+     *
+     * @param object $con Our connect to MySQL database
+     * @param array $user_form Info about new user
+     * @return $result
+     */
+    function add_user(object $con, array $user_form) {
+        $password = password_hash($user_form['password'], PASSWORD_DEFAULT);
+        $sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?)';
+        $stmt = db_get_prepare_stmt($con, $sql, [$user_form['email'], $password, $user_form['name']]);
+        return mysqli_stmt_execute($stmt);
+    };
 }
