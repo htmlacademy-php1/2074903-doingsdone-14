@@ -29,7 +29,7 @@ CREATE TABLE tasks (
     dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     dt_deadline TIMESTAMP DEFAULT NULL,
     status BOOLEAN DEFAULT FALSE,
-    file VARCHAR(255)
+    file VARCHAR(255) DEFAULT NULL
 );
 
 CREATE INDEX t_name ON tasks(name);

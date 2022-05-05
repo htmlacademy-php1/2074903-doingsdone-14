@@ -7,5 +7,7 @@ mysqli_set_charset($con, 'utf8');
 
 if (!$con) {
     $error = mysqli_connect_error();
-    $content = print('Ошибка подключения: '.$error);
+    $content = 'Ошибка подключения: '.$error;
 };
+
+$max_size_limit = 1024*1024*80;

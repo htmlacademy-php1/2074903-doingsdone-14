@@ -30,7 +30,7 @@ if ($con) {
                         .'WHERE user_id = 2 AND project_id =' . $project_id;
         } else {
             $sql = 'SELECT id, name, status, DATE_FORMAT(dt_deadline, "%d.%m.%Y") as dt_deadline, file FROM tasks '
-                        .'WHERE user_id = 2';
+                        .'WHERE user_id = 2 ORDER BY dt_add DESC';
         }
         $result = mysqli_query($con, $sql);
         return array_or_error($result);
