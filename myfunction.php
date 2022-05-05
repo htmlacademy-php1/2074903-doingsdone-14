@@ -48,7 +48,7 @@ function check_tasks_for_project($project_id, $projects_ids, array $tasks) {
  * Check to exist sent project in our form to add tasks
  *
  * @param int $id - our id to check
- * @param $allowed_list - an id column of our exist projects
+ * @param array $allowed_list - an id column of our exist projects
  * @return string about error
  */
 function validate_project($id, $allowed_list) {
@@ -59,14 +59,14 @@ function validate_project($id, $allowed_list) {
 };
 
 /**
- * Check null of a task name in out form to add tasks
+ * Check null of a name in our form
  *
- * @param string $name - the name of task
+ * @param string $name - the name of task or user
  * @return string about error
  */
 function validate_name($name) {
     if (!$name) {
-        return 'Название задачи не может быть пустым';
+        return 'Название/имя не может быть пустым';
     }
     return null;
 };
@@ -108,3 +108,35 @@ function validate_filesize($name, $max_size_limit) {
     }
     return null;
 };
+
+/**
+ * Check to exist sent user email in our form to sign up
+ *
+ * @param $email - our email to check
+ * @param array $allowed_list - an emails column of our users in database
+ * @return string about error
+ */
+function validate_email($email, $emails) {
+    if (in_array($email, $emails)) {
+        return 'Указан уже зарегистрированный e-mail, войдите по этому адресу или введите новый адрес';
+    };
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return 'Введен некорректный e-mail';
+    }
+    return null;
+};
+
+/**
+ * Check the string to have legth between our bourders
+ * @param string $value our checked string
+ * @param int $min min number of symbols
+ * @param int $max max number of symbols
+ * @return string about error
+ */
+function validate_length ($value, $min, $max) {
+    $length = strlen($value);
+    if ($length < $min OR $length > $max) {
+        return "Указана некорректная длина: строка должна содержать от $min до $max символов";
+    }
+    return null;
+}
