@@ -1,30 +1,27 @@
-<section class="content__side">
-        <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
+<h2 class="content__main-heading">Вход на сайт</h2>
 
-        <a class="button button--transparent content__side-button" href="form-authorization.html">Войти</a>
-      </section>
+<form class="form" action="auth.php" method="post" autocomplete="off">
+    <div class="form__row">
+        <label class="form__label" for="email">E-mail <sup>*</sup></label>
+        <?php $classname = !empty($errors['email']) ? "form__input--error" : ""; ?>
 
-      <main class="content__main">
-        <h2 class="content__main-heading">Вход на сайт</h2>
+        <input class="form__input <?= $classname; ?>" type="text" name="email" id="email" value="<?= get_post_value('email'); ?>" placeholder="Введите e-mail">
+        <?php if (!empty($errors['email'])): ?><p class="form__message"><?= $errors['email']; ?></p><?php endif; ?>
+    </div>
 
-        <form class="form" action="index.html" method="post" autocomplete="off">
-          <div class="form__row">
-            <label class="form__label" for="email">E-mail <sup>*</sup></label>
+    <div class="form__row">
+        <label class="form__label" for="password">Пароль <sup>*</sup></label>
+        <?php $classname = !empty($errors['password']) ? "form__input--error" : ""; ?>
 
-            <input class="form__input form__input--error" type="text" name="email" id="email" value="" placeholder="Введите e-mail">
+        <input class="form__input <?= $classname; ?>" type="password" name="password" id="password" value="<?= get_post_value('password'); ?>" placeholder="Введите пароль">
+        <?php if (!empty($errors['password'])): ?><p class="form__message"><?= $errors['password']; ?></p><?php endif; ?>
+    </div>
 
-            <p class="form__message">E-mail введён некорректно</p>
-          </div>
+    <div class="form__row form__row--controls">
+        <?php if (!empty($errors)): ?>
+        <p class="error-message">Пожалуйста, исправьте ошибки в форме</p>
+        <?php endif; ?>
 
-          <div class="form__row">
-            <label class="form__label" for="password">Пароль <sup>*</sup></label>
-
-            <input class="form__input" type="password" name="password" id="password" value="" placeholder="Введите пароль">
-          </div>
-
-          <div class="form__row form__row--controls">
-            <input class="button" type="submit" name="" value="Войти">
-          </div>
+        <input class="button" type="submit" name="" value="Войти">
+    </div>
         </form>
-
-      </main>

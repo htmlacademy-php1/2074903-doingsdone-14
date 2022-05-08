@@ -85,6 +85,6 @@ if ($con) {
         $email = mysqli_real_escape_string($con, $user_auth['email']);
         $sql = "SELECT * FROM users WHERE email = '$email'";
         $result = mysqli_query($con, $sql);
-        return array_or_error($result);
+        return array_or_error($result)[0];
     };
 }

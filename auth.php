@@ -17,26 +17,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = array_filter($errors);
     $user = get_user($con, $user_auth);
-    $password_check = password_verify($user_auth['password'], $user['password']);
+    var_dump($user);
 
-    if (!count($errors) AND $user AND $password_check) {
-        $_SESSION['user'] = $user;
+    if (!count($errors) AND $user) {
+        if (password_verify($user_auth['password'], $user['password'])) {
+            $_SESSION['user'] = $user;
+        } else {
+            $errors['password'] = 'Неверный пароль';
+        }
     } else {
-        $errors = ['email' => 'Такой пользователь не найден', 'password' => 'Неверный пароль'];
+        $errors['email'] = 'Такой пользователь не найден';
     }
 
     if (count($errors)) {
-        $page_content = include_template('/auth.php', [
+        $page_content = include_template('auth.php', [
             'user' => $user_auth,
             'errors' => $errors]);
     } else {
-        header("Location: /index.php");
+        header("Location: index.php");
         exit();
     }
 } else {
-    $page_content = include_template('/auth.php', []);
+    $page_content = include_template('auth.php', []);
     if (!empty($_SESSION['user'])) {
-        header("Location: /index.php");
+        header("Location: index.php");
         exit();
     }
 }
