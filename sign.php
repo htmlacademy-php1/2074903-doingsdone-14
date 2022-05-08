@@ -6,8 +6,8 @@ require_once('myfunction.php');
 
 $users = get_users($con);
 $emails = array_column($users, 'email');
-
-$id = $_SESSION['user']['id'];
+$projects = [];
+$project_id = NULL;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ['email', 'password', 'name'];
@@ -57,13 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $navigation_content = include_template('navigation.php', [
-    '_SESSION' => $$_SESSION['user'],
+    '_SESSION' => $_SESSION['user'],
     'projects' => $projects,
     'project_id' => $project_id,
     'content' => $page_content]);
 
 $layout_content = include_template('layout.php', [
-    '_SESSION' => $$_SESSION['user'],
+    '_SESSION' => $_SESSION['user'],
     'navigation' => $navigation_content,
     'title' => 'Дела в порядке']);
 
