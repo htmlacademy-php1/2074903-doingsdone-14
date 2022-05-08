@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $errors = array_filter($errors);
     $user = get_user($con, $user_auth);
-    var_dump($user);
 
     if (!count($errors) AND $user) {
         if (password_verify($user_auth['password'], $user['password'])) {
