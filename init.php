@@ -1,6 +1,5 @@
 <?php
 session_start();
-$id = $_SESSION['user']['id'];
 
 require_once('config/db.php');
 date_default_timezone_set('Europe/Moscow');

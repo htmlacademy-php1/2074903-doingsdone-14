@@ -9,6 +9,8 @@ $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
 $projects = get_projects($con);
 $projects_ids = array_column($projects, 'id');
 
+$id = $_SESSION['user']['id'];
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ['name', 'project_id'];
     $errors= [];
@@ -79,11 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $navigation_content = include_template('navigation.php', [
+    '_SESSION' => $$_SESSION['user'],
     'projects' => $projects,
     'project_id' => $project_id,
     'content' => $page_content]);
 
 $layout_content = include_template('layout.php', [
+    '_SESSION' => $$_SESSION['user'],
     'navigation' => $navigation_content,
     'title' => 'Дела в порядке']);
 

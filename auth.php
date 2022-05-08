@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!count($errors) AND $user) {
         if (password_verify($user_auth['password'], $user['password'])) {
             $_SESSION['user'] = $user;
+            $id = $_SESSION['user']['id'];
         } else {
             $errors['password'] = 'Неверный пароль';
         }
@@ -44,10 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$navigation_content = include_template('navigation-closed.php', [
+$navigation_content = include_template('navigation.php', [
+    '_SESSION' => $$_SESSION['user'],
+    'projects' => $projects,
+    'project_id' => $project_id,
     'content' => $page_content]);
 
-$layout_content = include_template('layout-closed.php', [
+$layout_content = include_template('layout.php', [
+    '_SESSION' => $$_SESSION['user'],
     'navigation' => $navigation_content,
     'title' => 'Дела в порядке']);
 
