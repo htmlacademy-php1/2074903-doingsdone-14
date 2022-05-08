@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (!empty($_SESSION['user'])) {
+    $id = $_SESSION['user']['id'];
+} else {
+    $id = null;
+}
 
 require_once('config/db.php');
 date_default_timezone_set('Europe/Moscow');

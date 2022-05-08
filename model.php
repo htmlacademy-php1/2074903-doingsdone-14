@@ -8,11 +8,11 @@
  * @return function array_or_error
  */
 function get_projects(object $con, $id):array {
-    $sql = 'SELECT p.id, p.name, COUNT(t.name) AS count '
-                .'FROM projects p '
-                .'LEFT JOIN tasks t ON p.id = t.project_id '
-                .'WHERE p.user_id = '.$id
-                .' GROUP BY p.id';
+    $sql = "SELECT p.id, p.name, COUNT(t.name) AS count "
+                ."FROM projects p "
+                ."LEFT JOIN tasks t ON p.id = t.project_id "
+                ."WHERE p.user_id = '$id' "
+                ."GROUP BY p.id";
     $result = mysqli_query($con, $sql);
     return array_or_error($result);
 };
@@ -27,11 +27,11 @@ function get_projects(object $con, $id):array {
  */
 function get_tasks(object $con, $project_id, $id):array {
     if (!empty($project_id)) {
-        $sql = 'SELECT id, name, status, DATE_FORMAT(dt_deadline, "%d.%m.%Y") as dt_deadline, file FROM tasks '
-                    .'WHERE user_id = '.$id.' AND project_id =' . $project_id;
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
+                    ."WHERE user_id = '$id' AND project_id = '$project_id'";
     } else {
-        $sql = 'SELECT id, name, status, DATE_FORMAT(dt_deadline, "%d.%m.%Y") as dt_deadline, file FROM tasks '
-                    .'WHERE user_id = '.$id.' ORDER BY dt_add DESC';
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
+                    ."WHERE user_id = '$id' ORDER BY dt_add DESC";
     }
     $result = mysqli_query($con, $sql);
     return array_or_error($result);
@@ -58,7 +58,7 @@ function get_users(object $con): array {
  * @return $result
  */
 function add_task(object $con, array $task_form, $id) {
-    $sql = 'INSERT INTO tasks (dt_add, user_id, name, project_id, dt_deadline, file, status) VALUES (NOW(), '.$id.', ?, ?, ?, ?, 0)';
+    $sql = "INSERT INTO tasks (dt_add, user_id, name, project_id, dt_deadline, file, status) VALUES (NOW(), '$id', ?, ?, ?, ?, 0)";
     $stmt = db_get_prepare_stmt($con, $sql, $task_form);
     return mysqli_stmt_execute($stmt);
 };

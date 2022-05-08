@@ -23,6 +23,7 @@ function is_hot ($task) {
 function array_or_error(object $result) {
     if (!$result) {
         exit ('Ошибка запроса');
+        return null;
     }
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 };

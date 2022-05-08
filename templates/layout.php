@@ -9,11 +9,15 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<body>
+<?php $classname = empty($_SESSION['user']) ? "body-background" : ""; ?>
+
+<body class="<?= $classname; ?>">
 <h1 class="visually-hidden">Дела в порядке</h1>
 
+<?php $classname = !empty($_SESSION['user']) ? "container--with-sidebar" : ""; ?>
+
 <div class="page-wrapper">
-    <div class="container container--with-sidebar">
+    <div class="container <?= $classname; ?>">
         <header class="main-header">
             <a href="/">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">

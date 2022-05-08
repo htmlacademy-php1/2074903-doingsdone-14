@@ -18,10 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = array_filter($errors);
     $user = get_user($con, $user_auth);
 
-    if (!count($errors) AND $user) {
+    if (!count($errors) AND !empty($user)) {
         if (password_verify($user_auth['password'], $user['password'])) {
-            $_SESSION['user'] = $user;
-            $id = $_SESSION['user']['id'];
+                $_SESSION['user'] = $user;
+                $id = $_SESSION['user']['id'];
         } else {
             $errors['password'] = 'Неверный пароль';
         }
@@ -35,24 +35,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'errors' => $errors]);
     } else {
         header("Location: index.php");
-        exit();
     }
 } else {
     $page_content = include_template('auth.php', []);
     if (!empty($_SESSION['user'])) {
         header("Location: index.php");
-        exit();
     }
 }
 
+$project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
+$projects = get_projects($con, $id);
+
 $navigation_content = include_template('navigation.php', [
-    '_SESSION' => $$_SESSION['user'],
+    '_SESSION' => $_SESSION['user'],
     'projects' => $projects,
     'project_id' => $project_id,
     'content' => $page_content]);
 
 $layout_content = include_template('layout.php', [
-    '_SESSION' => $$_SESSION['user'],
+    '_SESSION' => $_SESSION['user'],
     'navigation' => $navigation_content,
     'title' => 'Дела в порядке']);
 
