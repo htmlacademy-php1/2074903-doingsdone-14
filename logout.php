@@ -1,3 +1,5 @@
 <?php
-unset($_SESSION['user']);
-header("Location: /");
+require_once('init.php');
+
+$_SESSION['user'] = [];
+header("Location: index.php");

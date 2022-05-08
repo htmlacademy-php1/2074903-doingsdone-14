@@ -7,19 +7,22 @@ require_once('model.php');
 require_once('helpers.php');
 require_once('myfunction.php');
 
-$project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
+if (empty($_SESSION['user'])) {
+    $page_content = include_template('guest.php');
+    $project_id = NULL;
+    $projects = [];
+} else {
+    $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
+    $projects = get_projects($con, $id);
+    $projects_ids = array_column($projects, 'id');
+    $tasks = get_tasks($con, $project_id, $id);
+    $page_content = check_tasks_for_project($project_id, $projects_ids, $tasks);
 
-$projects = get_projects($con, $id);
-$projects_ids = array_column($projects, 'id');
-
-$tasks = get_tasks($con, $project_id, $id);
-
-$page_content = check_tasks_for_project($project_id, $projects_ids, $tasks);
-
-if (empty($page_content)) {
-    $page_content = include_template('main.php', [
-        'tasks' => $tasks,
-        'show_complete_tasks' => $show_complete_tasks]);
+    if (empty($page_content)) {
+        $page_content = include_template('main.php', [
+            'tasks' => $tasks,
+            'show_complete_tasks' => $show_complete_tasks]);
+    }
 }
 
 $navigation_content = include_template('navigation.php', [
