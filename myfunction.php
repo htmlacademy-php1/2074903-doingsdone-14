@@ -29,15 +29,18 @@ function array_or_error(object $result) {
 };
 
 /**
- * Returns code 404 when $project_id doesn't have request parameter or tasks
+ * Gives user a message if we don't have results of his/her search OR $project_id doesn't have request parameter or tasks
  *
  * @param int $project_id - our request parametr
  * @param array $projects_ids - a column with projects id in our projects array
  * @param array $tasks our array with tasks for $project_id
+ * @param string $search Our search request to find tasks
  * @return string about error with code 404
  */
-function check_tasks_for_project($project_id, $projects_ids, array $tasks) {
-    if (!empty($project_id)) {
+function check_tasks_for_project($project_id, $projects_ids, array $tasks, $search) {
+    if (!empty($search) AND empty($tasks)) {
+        return 'Ничего не найдено по вашему запросу';
+    } else if (!empty($project_id)) {
         if (!in_array($project_id, $projects_ids) OR empty($tasks)) {
             http_response_code(404);
             return 'Ошибка 404. Страница, которую Вы ищете, не может быть найдена';
