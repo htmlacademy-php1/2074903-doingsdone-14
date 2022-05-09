@@ -70,7 +70,7 @@ if (empty($_SESSION['user'])) {
                 'projects' => $projects,
                 'errors' => $errors]);
         } else {
-            $result = add_task($con, $task_form);
+            $result = add_task($con, $task_form, $id);
             if ($result) {
                 $task_id = mysqli_insert_id($con);
                 header("Location: index.php");

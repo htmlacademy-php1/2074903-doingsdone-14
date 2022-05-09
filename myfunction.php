@@ -132,6 +132,7 @@ function validate_email($email, $emails) {
 
 /**
  * Check the string to have legth between our bourders
+ *
  * @param string $value our checked string
  * @param int $min min number of symbols
  * @param int $max max number of symbols
@@ -144,3 +145,21 @@ function validate_length ($value, $min, $max) {
     }
     return null;
 };
+
+/**
+ * Check existing of added project
+ *
+ * @param array $projects Projects which current user has
+ * @param array $project_form New project which current user tries to create
+ * @return boolean $same_name exist or not this name of project
+ */
+function check_name_project(array $projects, array $project_form) {
+    $project_name = $project_form['name'];
+    $same_name = 0;
+    foreach ($projects as $project) {
+        if (strcasecmp($project_name, $project['name']) == 0) {
+            $same_name++;
+        }
+    }
+    return $same_name;
+}

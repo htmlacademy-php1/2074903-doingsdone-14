@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Create the array with projects and counted tasks for each of them for user with id=2
+ * Create the array with projects and counted tasks for each of them for current user
  *
  * @param object $con Our connect to MySQL database
  * @param int $id Our correct id of user who use our website right now
@@ -28,6 +28,7 @@ function get_projects(object $con, $id):array {
  */
 function get_tasks(object $con, $project_id, $id, $search):array {
     if (!empty($search)) {
+        $search = trim(filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS), " ");
         $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
                     ."WHERE user_id = '$id' AND MATCH(name) AGAINST(?) ORDER BY dt_add DESC";
         $stmt = db_get_prepare_stmt($con, $sql, [$search]);
@@ -96,4 +97,18 @@ function get_user(object $con, array $user_auth) {
     $sql = "SELECT * FROM users WHERE email = '$email'";
     $result = mysqli_query($con, $sql);
     return array_or_error($result)[0];
+};
+
+/**
+ * Add new project in our table of projects
+ *
+ * @param object $con Our connect to MySQL database
+ * @param array $project_form Info about new project from users
+ * @param int $id Our correct id of user who use our website right now
+ * @return $result
+ */
+function add_project(object $con, array $project_form, $id) {
+    $sql = "INSERT INTO projects (user_id, name) VALUES ('$id', ?)";
+    $stmt = db_get_prepare_stmt($con, $sql, $project_form);
+    return mysqli_stmt_execute($stmt);
 };

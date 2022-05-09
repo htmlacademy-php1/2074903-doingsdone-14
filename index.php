@@ -13,7 +13,7 @@ if (empty($_SESSION['user'])) {
     $projects = [];
 } else {
     $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
-    $search = trim(filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS), " ");
+    $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
 
     $projects = get_projects($con, $id);
     $projects_ids = array_column($projects, 'id');
