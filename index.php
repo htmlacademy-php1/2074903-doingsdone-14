@@ -13,14 +13,14 @@ if (empty($_SESSION['user'])) {
     $projects = [];
 } else {
     $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
-    $search = filter_input(INPUT_GET, 'search', FILTER_DEFAULT);
+    $search = trim(filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS), " ");
 
     $projects = get_projects($con, $id);
     $projects_ids = array_column($projects, 'id');
 
     $tasks = get_tasks($con, $project_id, $id, $search);
 
-    $page_content = check_tasks_for_project($project_id, $projects_ids, $tasks, $search);
+    $page_content = check_tasks_for_project_or_search($project_id, $projects_ids, $tasks, $search);
 
     if (empty($page_content)) {
         $page_content = include_template('main.php', [

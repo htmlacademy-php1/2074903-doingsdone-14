@@ -37,7 +37,7 @@ function array_or_error(object $result) {
  * @param string $search Our search request to find tasks
  * @return string about error with code 404
  */
-function check_tasks_for_project($project_id, $projects_ids, array $tasks, $search) {
+function check_tasks_for_project_or_search($project_id, $projects_ids, array $tasks, $search) {
     if (!empty($search) AND empty($tasks)) {
         return 'Ничего не найдено по вашему запросу';
     } else if (!empty($project_id)) {
