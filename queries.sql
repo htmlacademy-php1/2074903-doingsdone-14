@@ -9,10 +9,10 @@ INSERT INTO projects (name, user_id) VALUES
     ('Входящие', (SELECT id FROM users WHERE id = 1)),
     ('Учеба', (SELECT id FROM users WHERE id = 3)),
     ('Работа', (SELECT id FROM users WHERE id = 2)),
-    ('Домашние дела', (SELECT id FROM users WHERE id = 3)),
+    ('Домашние дела', (SELECT id FROM users WHERE id = 7)),
     ('Авто', (SELECT id FROM users WHERE id = 1)),
-    ('Входящие', (SELECT id FROM users WHERE id = 2)),
-    ('Учеба', (SELECT id FROM users WHERE id = 2));
+    ('Входящие', (SELECT id FROM users WHERE id = 7)),
+    ('Учеба', (SELECT id FROM users WHERE id = 7));
 
 /* Запишем данные по нашим задачам в таблицу с задачами */
 INSERT INTO tasks (user_id, project_id, name, dt_deadline, status) VALUES
