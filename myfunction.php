@@ -154,12 +154,11 @@ function validate_length ($value, $min, $max) {
  * @return boolean $same_name exist or not this name of project
  */
 function check_name_project(array $projects, array $project_form) {
-    $project_name = $project_form['name'];
-    $same_name = 0;
+    $project_name = mb_strtolower($project_form['name']);
     foreach ($projects as $project) {
-        if (strcasecmp($project_name, $project['name']) == 0) {
-            $same_name++;
+        if (mb_strtolower($project['name']) === $project_name) {
+            return true;
         }
     }
-    return $same_name;
+    return false;
 }

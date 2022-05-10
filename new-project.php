@@ -45,7 +45,8 @@ if (empty($_SESSION['user'])) {
                 $project_id = mysqli_insert_id($con);
                 header("Location: index.php");
             }
-        } else if (count($errors)) {
+        }
+        if (count($errors)) {
             $page_content = include_template('add-project.php', ['errors' => $errors]);
         }
     } else {
