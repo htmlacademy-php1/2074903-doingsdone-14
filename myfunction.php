@@ -85,10 +85,11 @@ function check_date($date) {
     if (!is_date_valid($date)) {
         return 'Указан неверный формат даты';
     };
-    if (strtotime($date) >= time()) {
-        return null;
-    }
-    return 'Указана устаревшая дата';
+    $date_and_time = strtotime($date)+3600*24-1;
+    $deadline = date('Y-m-d H:i:s', $date_and_time);
+    if (strtotime($deadline) < time()) {
+        return 'Указана устаревшая дата';
+    };
 };
 
 /**

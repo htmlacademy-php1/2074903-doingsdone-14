@@ -42,7 +42,11 @@ if (empty($_SESSION['user'])) {
 
         if (!empty($_POST['dt_deadline'])) {
             $dt_deadline = mysqli_real_escape_string($con, $_POST['dt_deadline']);
-            $task_form['dt_deadline'] = check_date($dt_deadline);
+            $errors['dt_deadline'] = check_date($dt_deadline);
+            if ($errors['dt_deadline'] === null) {
+                $errors = [];
+                $task_form['dt_deadline'] = $dt_deadline;
+            }
         } else {
             $task_form['dt_deadline'] = NULL;
         }
@@ -64,6 +68,7 @@ if (empty($_SESSION['user'])) {
             $task_form['file'] = NULL;
         }
 
+        var_dump($errors);
         if (count($errors)) {
             $page_content = include_template('add-task.php', [
                 'task' => $task_form,
