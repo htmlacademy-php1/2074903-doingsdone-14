@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS business_is_good;
+
 CREATE DATABASE business_is_good
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
@@ -33,3 +35,4 @@ CREATE TABLE tasks (
 );
 
 CREATE INDEX t_name ON tasks(name);
+CREATE FULLTEXT INDEX tasks_search ON tasks(name);

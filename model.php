@@ -23,17 +23,25 @@ function get_projects(object $con, $id):array {
  * @param object $con Our connect to MySQL database
  * @param int $project_id Identify our project
  * @param int $id Our correct id of user who use our website right now
+ * @param string $search Our search request to find tasks
  * @return function array_or_error
  */
-function get_tasks(object $con, $project_id, $id):array {
-    if (!empty($project_id)) {
+function get_tasks(object $con, $project_id, $id, $search):array {
+    if (!empty($search)) {
         $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
-                    ."WHERE user_id = '$id' AND project_id = '$project_id'";
+                    ."WHERE user_id = '$id' AND MATCH(name) AGAINST(?) ORDER BY dt_add DESC";
+        $stmt = db_get_prepare_stmt($con, $sql, [$search]);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+    } else if (!empty($project_id)) {
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
+                    ."WHERE user_id = '$id' AND project_id = '$project_id' ORDER BY dt_add DESC";
+        $result = mysqli_query($con, $sql);
     } else {
         $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
                     ."WHERE user_id = '$id' ORDER BY dt_add DESC";
+        $result = mysqli_query($con, $sql);
     }
-    $result = mysqli_query($con, $sql);
     return array_or_error($result);
 };
 
