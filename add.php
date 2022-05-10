@@ -68,7 +68,6 @@ if (empty($_SESSION['user'])) {
             $task_form['file'] = NULL;
         }
 
-        var_dump($errors);
         if (count($errors)) {
             $page_content = include_template('add-task.php', [
                 'task' => $task_form,

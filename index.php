@@ -14,11 +14,15 @@ if (empty($_SESSION['user'])) {
 } else {
     $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
     $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
+    $task_id = filter_input(INPUT_GET, 'task_id', FILTER_SANITIZE_NUMBER_INT);
+    $check = filter_input(INPUT_GET, 'check', FILTER_SANITIZE_NUMBER_INT);
 
     $projects = get_projects($con, $id);
     $projects_ids = array_column($projects, 'id');
 
     $tasks = get_tasks($con, $project_id, $id, $search);
+
+    $checked = change_status_task($con, $task_id, $check, $tasks);
 
     $page_content = check_tasks_for_project_or_search($project_id, $projects_ids, $tasks, $search);
 
