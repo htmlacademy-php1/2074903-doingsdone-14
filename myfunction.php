@@ -18,11 +18,12 @@ function is_hot ($task) {
  * In a request to the database, it creates an array based on the response or returns an error
  *
  * @param object $result response from our database to our request
- * @return functino to print or create array
+ * @return function to exit or create array
  */
 function array_or_error(object $result) {
     if (!$result) {
-        return 'Ошибка запроса';
+        exit ('Ошибка запроса');
+        return null;
     }
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 };
@@ -77,7 +78,7 @@ function validate_name($name) {
  * @param string $date - sent date of deadline
  * @return string about errors
  */
-function validate_date($date) {
+function check_date($date) {
     if (!is_date_valid($date)) {
         return 'Указан неверный формат даты';
     };
@@ -113,16 +114,16 @@ function validate_filesize($name, $max_size_limit) {
  * Check to exist sent user email in our form to sign up
  *
  * @param $email - our email to check
- * @param array $allowed_list - an emails column of our users in database
+ * @param array $emails - an emails column of our users in database
  * @return string about error
  */
 function validate_email($email, $emails) {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return 'Введен некорректный e-mail';
+    };
     if (in_array($email, $emails)) {
         return 'Указан уже зарегистрированный e-mail, войдите по этому адресу или введите новый адрес';
     };
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return 'Введен некорректный e-mail';
-    }
     return null;
 };
 
@@ -139,4 +140,4 @@ function validate_length ($value, $min, $max) {
         return "Указана некорректная длина: строка должна содержать от $min до $max символов";
     }
     return null;
-}
+};
