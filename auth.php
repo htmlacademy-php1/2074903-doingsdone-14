@@ -47,13 +47,13 @@ $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
 $projects = get_projects($con, $id);
 
 $navigation_content = include_template('navigation.php', [
-    '_SESSION' => $_SESSION['user'],
+    '_SESSION' => [],
     'projects' => $projects,
     'project_id' => $project_id,
     'content' => $page_content]);
 
 $layout_content = include_template('layout.php', [
-    '_SESSION' => $_SESSION['user'],
+    '_SESSION' => [],
     'navigation' => $navigation_content,
     'title' => 'Дела в порядке']);
 

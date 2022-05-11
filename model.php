@@ -118,19 +118,12 @@ function add_project(object $con, array $project_form, $id) {
  *
  * @param object $con Our connect to MySQL database
  * @param int $task_id Our task which was marked as checked
- * @param int $check The fact of pushing the checkbox of checked task (only =1)
- * @param array $tasks Our current tasks for this user
+ * @param int $is_checked The status of pushed task
  * @return redirect to index.php
  */
-function change_status_task(object $con, $task_id, $check, array $tasks) {
-    if (!empty($check)) {
-        foreach ($tasks as $task) {
-            if ($task['id'] === $task_id) {
-                $cur_status = $task['status'];
-                $new_status = !$cur_status;
-            }
-        }
-        $sql = "UPDATE tasks SET status = '$new_status' WHERE id = '$task_id'";
+function change_status_task(object $con, $task_id, $is_checked) {
+    if ($task_id) {
+        $sql = "UPDATE tasks SET status = '$is_checked' WHERE id = '$task_id'";
         $result = mysqli_query($con, $sql);
         if ($result) {
             header("Location: index.php");
