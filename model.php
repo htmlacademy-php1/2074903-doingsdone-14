@@ -18,15 +18,18 @@ function get_projects(object $con, $id):array {
 };
 
 /**
- * Create the array with tasks for user with id=2
+ * Create the array with tasks for current user in different situation
  *
  * @param object $con Our connect to MySQL database
  * @param int $project_id Identify our project
  * @param int $id Our correct id of user who use our website right now
  * @param string $search Our search request to find tasks
+ * @param int $today Our filter of today's tasks
+ * @param int $tomorrow Our filter of tomorrow's tasks
+ * @param int $overdue Our filter for overdue tasks
  * @return function array_or_error
  */
-function get_tasks(object $con, $project_id, $id, $search):array {
+function get_tasks(object $con, $project_id, $id, $search, $today, $tomorrow, $overdue):array {
     if (!empty($search)) {
         $search = trim(filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS), " ");
         $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
@@ -37,6 +40,21 @@ function get_tasks(object $con, $project_id, $id, $search):array {
     } else if (!empty($project_id)) {
         $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
                     ."WHERE user_id = '$id' AND project_id = '$project_id' ORDER BY dt_add DESC";
+        $result = mysqli_query($con, $sql);
+    } else if (!empty($today)) {
+        $date = date('Y-m-d', strtotime("now"));
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
+                    ."WHERE user_id = '$id' AND dt_deadline = '$date' ORDER BY dt_add DESC";
+        $result = mysqli_query($con, $sql);
+    } else if (!empty($tomorrow)) {
+        $date = date('Y-m-d', strtotime("+1 day"));
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
+                    ."WHERE user_id = '$id' AND dt_deadline = '$date' ORDER BY dt_add DESC";
+        $result = mysqli_query($con, $sql);
+    } else if (!empty($overdue)) {
+        $date = date('Y-m-d', strtotime("now"));
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
+                    ."WHERE user_id = '$id' AND dt_deadline < '$date' ORDER BY dt_add DESC";
         $result = mysqli_query($con, $sql);
     } else {
         $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
