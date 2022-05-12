@@ -42,7 +42,11 @@ if (empty($_SESSION['user'])) {
 
         if (!empty($_POST['dt_deadline'])) {
             $dt_deadline = mysqli_real_escape_string($con, $_POST['dt_deadline']);
-            $task_form['dt_deadline'] = check_date($dt_deadline);
+            $errors['dt_deadline'] = check_date($dt_deadline);
+            if ($errors['dt_deadline'] === null) {
+                $errors = [];
+                $task_form['dt_deadline'] = $dt_deadline;
+            }
         } else {
             $task_form['dt_deadline'] = NULL;
         }
@@ -70,7 +74,7 @@ if (empty($_SESSION['user'])) {
                 'projects' => $projects,
                 'errors' => $errors]);
         } else {
-            $result = add_task($con, $task_form);
+            $result = add_task($con, $task_form, $id);
             if ($result) {
                 $task_id = mysqli_insert_id($con);
                 header("Location: index.php");

@@ -85,10 +85,11 @@ function check_date($date) {
     if (!is_date_valid($date)) {
         return 'Указан неверный формат даты';
     };
-    if (strtotime($date) >= time()) {
-        return null;
-    }
-    return 'Указана устаревшая дата';
+    $date_and_time = strtotime($date)+3600*24-1;
+    $deadline = date('Y-m-d H:i:s', $date_and_time);
+    if (strtotime($deadline) < time()) {
+        return 'Указана устаревшая дата';
+    };
 };
 
 /**
@@ -132,6 +133,7 @@ function validate_email($email, $emails) {
 
 /**
  * Check the string to have legth between our bourders
+ *
  * @param string $value our checked string
  * @param int $min min number of symbols
  * @param int $max max number of symbols
@@ -144,3 +146,20 @@ function validate_length ($value, $min, $max) {
     }
     return null;
 };
+
+/**
+ * Check existing of added project
+ *
+ * @param array $projects Projects which current user has
+ * @param array $project_form New project which current user tries to create
+ * @return boolean $same_name exist or not this name of project
+ */
+function check_name_project(array $projects, array $project_form) {
+    $project_name = mb_strtolower($project_form['name']);
+    foreach ($projects as $project) {
+        if (mb_strtolower($project['name']) === $project_name) {
+            return true;
+        }
+    }
+    return false;
+}

@@ -8,10 +8,14 @@
 
 <div class="tasks-controls">
     <nav class="tasks-switch">
-        <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-        <a href="/" class="tasks-switch__item">Повестка дня</a>
-        <a href="/" class="tasks-switch__item">Завтра</a>
-        <a href="/" class="tasks-switch__item">Просроченные</a>
+        <a href="/" class="tasks-switch__item
+        <?php if (!($today OR $tomorrow OR $overdue)): ?>tasks-switch__item--active<?php endif; ?>">Все задачи</a>
+        <a href="/?today=1" class="tasks-switch__item
+        <?php if ($today): ?>tasks-switch__item--active<?php endif; ?>">Повестка дня</a>
+        <a href="/?tomorrow=1" class="tasks-switch__item
+        <?php if ($tomorrow): ?>tasks-switch__item--active<?php endif; ?>">Завтра</a>
+        <a href="/?overdue=1" class="tasks-switch__item
+        <?php if ($overdue): ?>tasks-switch__item--active<?php endif; ?>">Просроченные</a>
     </nav>
 
     <label class="checkbox">
@@ -28,7 +32,8 @@
     <tr class="tasks__item task <?php if ($task['status']): ?>task--completed<?php endif; ?> <?php if (is_hot($task)): ?>task--important<?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">
-                <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+                <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="<?= $task['id']; ?>"
+                <?php if ($task['status']): ?> checked <?php endif; ?>>
                 <span class="checkbox__text"><?= htmlspecialchars($task['name']); ?></span>
             </label>
         </td>
@@ -39,9 +44,13 @@
             <?php endif; ?>
         </td>
 
+
+        <td class="task__date">
         <?php if (!empty($task['dt_deadline'])): ?>
-        <td class="task__date"><?= $task['dt_deadline']; ?></td>
+            <?= $task['dt_deadline']; ?>
         <?php endif; ?>
+        </td>
+
     </tr>
 <?php endforeach; ?>
 </table>
