@@ -21,7 +21,7 @@ if (empty($_SESSION['user'])) {
         'title' => 'Дела в порядке']);
 } else {
     $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
-    $projects = get_projects($con, $id);
+    $projects = get_projects($con, $user_id);
     $projects_ids = array_column($projects, 'id');
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -85,7 +85,7 @@ if (empty($_SESSION['user'])) {
                 'projects' => $projects,
                 'errors' => $errors]);
         } else {
-            $result = add_task($con, $task_form, $id);
+            $result = add_task($con, $task_form, $user_id);
             if ($result) {
                 $task_id = mysqli_insert_id($con);
                 header("Location: index.php");

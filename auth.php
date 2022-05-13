@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!count($errors) AND !empty($user)) {
         if (password_verify($user_auth['password'], $user['password'])) {
                 $_SESSION['user'] = $user;
-                $id = $_SESSION['user']['id'];
+                $user_id = $_SESSION['user']['id'];
         } else {
             $errors['password'] = 'Неверный пароль';
         }
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
-$projects = get_projects($con, $id);
+$projects = get_projects($con, $user_id);
 
 $navigation_content = include_template('navigation.php', [
     'user' => [],

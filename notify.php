@@ -26,8 +26,8 @@ $mail->setFrom('keks@phpdemo.ru', 'keks');
 $users_notify = get_users_notify($con);
 $date = date('Y-m-d', strtotime("now"));
 foreach ($users_notify as $user) {
-    $id = $user['id'];
-    $tasks_notify = get_tasks_notify($con, $id, $date);
+    $user_id = $user['id'];
+    $tasks_notify = get_tasks_notify($con, $user_id, $date);
     $mail->addAddress($user['email'], $task['name']);
     $mail->Subject = 'Уведомление от сервиса «Дела в порядке»';
     $mail->AltBody = 'Уважаемый, ' . $user['name'] . '. У вас запланирована задача ' . $tasks_notify . ' на ' . $date;

@@ -51,12 +51,12 @@ function check_tasks_for_project_or_search($project_id, $projects_ids, array $ta
 /**
  * Check to exist sent project in our form to add tasks
  *
- * @param int $id - our id to check
+ * @param int $project_id - our id to check
  * @param array $allowed_list - an id column of our exist projects
  * @return string about error
  */
-function validate_project($id, $allowed_list) {
-    if (!in_array($id, $allowed_list)) {
+function validate_project($project_id, $allowed_list) {
+    if (!in_array($project_id, $allowed_list)) {
         return 'Указан несуществующий проект';
     }
     return null;

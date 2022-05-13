@@ -12,3 +12,4 @@ uploads/*
 info.php
 adminer.php
 config/db.php
+composer.lock

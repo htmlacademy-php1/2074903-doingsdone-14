@@ -21,7 +21,7 @@ if (empty($_SESSION['user'])) {
         'title' => 'Дела в порядке']);
 } else {
     $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
-    $projects = get_projects($con, $id);
+    $projects = get_projects($con, $user_id);
     $projects_ids = array_column($projects, 'id');
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -51,7 +51,7 @@ if (empty($_SESSION['user'])) {
         if (!count($errors) AND check_name_project($projects, $project_form)) {
             $errors['name'] = 'У вас уже есть такой проект';
         } else if (!count($errors) AND !check_name_project($projects, $project_form)) {
-            $result = add_project($con, $project_form, $id);
+            $result = add_project($con, $project_form, $user_id);
             if ($result) {
                 $project_id = mysqli_insert_id($con);
                 header("Location: index.php");

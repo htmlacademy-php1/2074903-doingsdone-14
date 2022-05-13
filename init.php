@@ -1,9 +1,9 @@
 <?php
 session_start();
 if (!empty($_SESSION['user'])) {
-    $id = $_SESSION['user']['id'];
+    $user_id = $_SESSION['user']['id'];
 } else {
-    $id = null;
+    $user_id = null;
 }
 
 require_once('config/db.php');

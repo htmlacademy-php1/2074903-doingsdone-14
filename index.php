@@ -31,10 +31,10 @@ if (empty($_SESSION['user'])) {
     $tomorrow = filter_input(INPUT_GET, 'tomorrow', FILTER_SANITIZE_NUMBER_INT);
     $overdue = filter_input(INPUT_GET, 'overdue', FILTER_SANITIZE_NUMBER_INT);
 
-    $projects = get_projects($con, $id);
+    $projects = get_projects($con, $user_id);
     $projects_ids = array_column($projects, 'id');
 
-    $tasks = get_tasks($con, $project_id, $id, $search, $today, $tomorrow, $overdue);
+    $tasks = get_tasks($con, $project_id, $user_id, $search, $today, $tomorrow, $overdue);
 
     $checked = change_status_task($con, $task_id, $is_checked);
 
