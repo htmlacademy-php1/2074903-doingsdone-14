@@ -147,4 +147,30 @@ function change_status_task(object $con, $task_id, $is_checked) {
             header("Location: index.php");
         }
     }
+};
+
+/**
+ * Gives users to mail them notification about hot tasks
+ *
+ * @param object $con Our connect to MySQL database
+ * @return function array_or_error
+ */
+function get_users_notify(object $con) {
+    $sql = "SELECT id, name, email FROM users";
+    $result = mysqli_query($con, $sql);
+    return array_or_error($result);
+};
+
+/**
+ * Gives hot tasks for concrete user to mail them notification
+ *
+ * @param object $con Our connect to MySQL database
+ * @param int $id ID of our concrete user
+ * @param date $date Current date
+ * @return list of tasks
+ */
+function get_tasks_notify(object $con, int $id, $date) {
+    $sql = "SELECT name FROM taks WHERE status = 0 AND dt_deadline = '$date' AND user_id = '$id'";
+    $result = mysqli_query($con, $sql);
+    return array_or_error($result)[0];
 }
