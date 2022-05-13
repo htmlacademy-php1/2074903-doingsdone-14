@@ -57,13 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $navigation_content = include_template('navigation.php', [
-    '_SESSION' => $_SESSION['user'],
+    'user' => [],
     'projects' => $projects,
     'project_id' => $project_id,
     'content' => $page_content]);
 
 $layout_content = include_template('layout.php', [
-    '_SESSION' => $_SESSION['user'],
+    'user' => [],
     'navigation' => $navigation_content,
     'title' => 'Дела в порядке']);
 

@@ -13,13 +13,13 @@ if (empty($_SESSION['user'])) {
     $projects = [];
 
     $navigation_content = include_template('navigation.php', [
-        '_SESSION' => [],
+        'user' => [],
         'projects' => $projects,
         'project_id' => $project_id,
         'content' => $page_content]);
 
     $layout_content = include_template('layout.php', [
-        '_SESSION' => [],
+        'user' => [],
         'navigation' => $navigation_content,
         'title' => 'Дела в порядке']);
 } else {
@@ -49,13 +49,13 @@ if (empty($_SESSION['user'])) {
             'overdue' => $overdue]);
     }
     $navigation_content = include_template('navigation.php', [
-        '_SESSION' => $_SESSION['user'],
+        'user' => $_SESSION['user'],
         'projects' => $projects,
         'project_id' => $project_id,
         'content' => $page_content]);
 
     $layout_content = include_template('layout.php', [
-        '_SESSION' => $_SESSION['user'],
+        'user' => $_SESSION['user'],
         'navigation' => $navigation_content,
         'title' => 'Дела в порядке']);
 }

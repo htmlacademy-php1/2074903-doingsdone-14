@@ -8,6 +8,17 @@ if (empty($_SESSION['user'])) {
     $page_content = include_template('guest.php');
     $project_id = NULL;
     $projects = [];
+
+    $navigation_content = include_template('navigation.php', [
+        'user' => $_SESSION['user'],
+        'projects' => $projects,
+        'project_id' => $project_id,
+        'content' => $page_content]);
+
+    $layout_content = include_template('layout.php', [
+        'user' => $_SESSION['user'],
+        'navigation' => $navigation_content,
+        'title' => 'Дела в порядке']);
 } else {
     $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
     $projects = get_projects($con, $id);
@@ -52,17 +63,16 @@ if (empty($_SESSION['user'])) {
     } else {
         $page_content = include_template('add-project.php');
     }
+    $navigation_content = include_template('navigation.php', [
+        'user' => $_SESSION['user'],
+        'projects' => $projects,
+        'project_id' => $project_id,
+        'content' => $page_content]);
+
+    $layout_content = include_template('layout.php', [
+        'user' => $_SESSION['user'],
+        'navigation' => $navigation_content,
+        'title' => 'Дела в порядке']);
 }
-
-$navigation_content = include_template('navigation.php', [
-    '_SESSION' => $_SESSION['user'],
-    'projects' => $projects,
-    'project_id' => $project_id,
-    'content' => $page_content]);
-
-$layout_content = include_template('layout.php', [
-    '_SESSION' => $_SESSION['user'],
-    'navigation' => $navigation_content,
-    'title' => 'Дела в порядке']);
 
 print($layout_content);

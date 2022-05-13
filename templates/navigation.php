@@ -1,5 +1,5 @@
 <section class="content__side">
-    <?php if (empty($_SESSION['user'])): ?>
+    <?php if (empty($user)): ?>
 
         <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
 

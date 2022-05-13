@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
 </head>
 
-<?php $classname = empty($_SESSION['user']) ? "body-background" : ""; ?>
+<?php $classname = empty($user) ? "body-background" : ""; ?>
 
 <body class="<?= $classname; ?>">
 <h1 class="visually-hidden">Дела в порядке</h1>
 
-<?php $classname = !empty($_SESSION['user']) ? "container--with-sidebar" : ""; ?>
+<?php $classname = !empty($user) ? "container--with-sidebar" : ""; ?>
 
 <div class="page-wrapper">
     <div class="container <?= $classname; ?>">
@@ -25,13 +25,13 @@
 
             <div class="main-header__side">
 
-                <?php if (!empty($_SESSION['user'])): ?>
+                <?php if (!empty($user)): ?>
 
                     <a class="main-header__side-item button button--plus open-modal" href="add.php">Добавить задачу</a>
 
                     <div class="main-header__side-item user-menu">
                         <div class="user-menu__data">
-                            <p><?= strip_tags($_SESSION['user']['name']); ?></p>
+                            <p><?= strip_tags($user['name']); ?></p>
 
                             <a href="logout.php">Выйти</a>
                         </div>
@@ -58,7 +58,7 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <?php if (!empty($_SESSION['user'])): ?>
+        <?php if (!empty($user)): ?>
         <a class="main-footer__button button button--plus" href="add.php">Добавить задачу</a>
         <?php endif; ?>
 
