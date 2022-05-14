@@ -1,4 +1,5 @@
 <?php
+
 require_once('init.php');
 require_once('model.php');
 require_once('helpers.php');
@@ -6,7 +7,7 @@ require_once('myfunction.php');
 
 if (empty($_SESSION['user'])) {
     $page_content = include_template('guest.php');
-    $project_id = NULL;
+    $project_id = null;
     $projects = [];
 
     $navigation_content = include_template('navigation.php', [
@@ -26,8 +27,8 @@ if (empty($_SESSION['user'])) {
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $required = ['name', 'project_id'];
-        $errors= [];
-        $rules =[
+        $errors = [];
+        $rules = [
             'name' => function ($value) {
                 return validate_name($value);
             },
@@ -59,7 +60,7 @@ if (empty($_SESSION['user'])) {
                 $task_form['dt_deadline'] = $dt_deadline;
             }
         } else {
-            $task_form['dt_deadline'] = NULL;
+            $task_form['dt_deadline'] = null;
         }
 
         if (!empty($_FILES['file']['name'])) {
@@ -76,7 +77,7 @@ if (empty($_SESSION['user'])) {
                 $task['file'] = $file_name;
             }
         } else {
-            $task_form['file'] = NULL;
+            $task_form['file'] = null;
         }
 
         if (count($errors)) {

@@ -1,4 +1,5 @@
 <?php
+
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 
@@ -9,7 +10,7 @@ require_once('myfunction.php');
 
 if (empty($_SESSION['user'])) {
     $page_content = include_template('guest.php');
-    $project_id = NULL;
+    $project_id = null;
     $projects = [];
 
     $navigation_content = include_template('navigation.php', [

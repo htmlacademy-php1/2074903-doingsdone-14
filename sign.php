@@ -1,4 +1,5 @@
 <?php
+
 require_once('init.php');
 require_once('model.php');
 require_once('helpers.php');
@@ -7,13 +8,13 @@ require_once('myfunction.php');
 $users = get_users($con);
 $emails = array_column($users, 'email');
 $projects = [];
-$project_id = NULL;
+$project_id = null;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ['email', 'password', 'name'];
-    $errors= [];
+    $errors = [];
 
-    $rules =[
+    $rules = [
         'email' => function ($value) use ($emails) {
             return validate_email($value, $emails);
         },

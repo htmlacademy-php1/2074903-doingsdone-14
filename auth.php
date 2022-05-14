@@ -1,4 +1,5 @@
 <?php
+
 require_once('init.php');
 require_once('model.php');
 require_once('helpers.php');
@@ -6,7 +7,7 @@ require_once('myfunction.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ['email', 'password'];
-    $errors= [];
+    $errors = [];
     $user_auth = filter_input_array(INPUT_POST, ['email' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT], true);
 
     foreach ($user_auth as $key => $value) {
@@ -18,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = array_filter($errors);
     $user = get_user($con, $user_auth);
 
-    if (!count($errors) AND !empty($user)) {
+    if (!count($errors) and !empty($user)) {
         if (password_verify($user_auth['password'], $user['password'])) {
                 $_SESSION['user'] = $user;
                 $user_id = $_SESSION['user']['id'];

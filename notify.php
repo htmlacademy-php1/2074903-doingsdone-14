@@ -1,4 +1,5 @@
 <?php
+
 require_once('init.php');
 require_once('model.php');
 require_once('helpers.php');

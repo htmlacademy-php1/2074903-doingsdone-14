@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 if (!empty($_SESSION['user'])) {
     $user_id = $_SESSION['user']['id'];
@@ -14,7 +15,7 @@ mysqli_set_charset($con, 'utf8');
 
 if (!$con) {
     $error = mysqli_connect_error();
-    $content = 'Ошибка подключения: '.$error;
+    $content = 'Ошибка подключения: ' . $error;
 };
 
-$max_size_limit = 1024*1024*80;
+$max_size_limit = 1024 * 1024 * 80;

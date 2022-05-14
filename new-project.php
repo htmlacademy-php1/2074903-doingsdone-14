@@ -1,4 +1,5 @@
 <?php
+
 require_once('init.php');
 require_once('model.php');
 require_once('helpers.php');
@@ -6,7 +7,7 @@ require_once('myfunction.php');
 
 if (empty($_SESSION['user'])) {
     $page_content = include_template('guest.php');
-    $project_id = NULL;
+    $project_id = null;
     $projects = [];
 
     $navigation_content = include_template('navigation.php', [
@@ -26,8 +27,8 @@ if (empty($_SESSION['user'])) {
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $required = ['name'];
-        $errors= [];
-        $rules =[
+        $errors = [];
+        $rules = [
             'name' => function ($value) {
                 return validate_name($value);
             }
@@ -48,9 +49,9 @@ if (empty($_SESSION['user'])) {
 
         $errors = array_filter($errors);
 
-        if (!count($errors) AND check_name_project($projects, $project_form)) {
+        if (!count($errors) and check_name_project($projects, $project_form)) {
             $errors['name'] = 'У вас уже есть такой проект';
-        } else if (!count($errors) AND !check_name_project($projects, $project_form)) {
+        } elseif (!count($errors) and !check_name_project($projects, $project_form)) {
             $result = add_project($con, $project_form, $user_id);
             if ($result) {
                 $project_id = mysqli_insert_id($con);
