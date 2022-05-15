@@ -210,8 +210,8 @@ function get_users_notify(object $con)
  */
 function get_tasks_notify(object $con, int $user_id, $date)
 {
-    $sql = "SELECT name FROM taks WHERE status = 0 "
+    $sql = "SELECT name FROM tasks WHERE status = 0 "
             . "AND dt_deadline = '$date' AND user_id = '$user_id'";
     $result = mysqli_query($con, $sql);
-    return array_or_error($result)[0];
+    return array_or_error($result);
 }
