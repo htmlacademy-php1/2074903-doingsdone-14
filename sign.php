@@ -1,9 +1,9 @@
 <?php
 
-require_once('init.php');
-require_once('model.php');
-require_once('helpers.php');
-require_once('myfunction.php');
+require_once 'init.php';
+require_once 'model.php';
+require_once 'helpers.php';
+require_once 'myfunction.php';
 
 $users = get_users($con);
 $emails = array_column($users, 'email');
@@ -26,7 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     ];
 
-    $user_form = filter_input_array(INPUT_POST, ['email' => FILTER_DEFAULT, 'password' => FILTER_DEFAULT, 'name' => FILTER_DEFAULT], true);
+    $user_form = filter_input_array(INPUT_POST, [
+        'email' => FILTER_DEFAULT,
+        'password' => FILTER_DEFAULT,
+        'name' => FILTER_DEFAULT
+    ], true);
 
     foreach ($user_form as $key => $value) {
         if (!empty($rules[$key])) {

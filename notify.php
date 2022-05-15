@@ -1,14 +1,14 @@
 <?php
 
-require_once('init.php');
-require_once('model.php');
-require_once('helpers.php');
-require_once('myfunction.php');
+require_once 'init.php';
+require_once 'model.php';
+require_once 'helpers.php';
+require_once 'myfunction.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-require_once('vendor/autoload.php');
+require_once 'vendor/autoload.php';
 
 $mail = new PHPMailer();
 

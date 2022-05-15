@@ -3,10 +3,10 @@
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 
-require_once('init.php');
-require_once('model.php');
-require_once('helpers.php');
-require_once('myfunction.php');
+require_once 'init.php';
+require_once 'model.php';
+require_once 'helpers.php';
+require_once 'myfunction.php';
 
 if (empty($_SESSION['user'])) {
     $page_content = include_template('guest.php');

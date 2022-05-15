@@ -7,7 +7,7 @@ if (!empty($_SESSION['user'])) {
     $user_id = null;
 }
 
-require_once('config/db.php');
+require_once 'config/db.php';
 date_default_timezone_set('Europe/Moscow');
 
 $con = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
