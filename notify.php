@@ -34,8 +34,10 @@ foreach ($users_notify as $user) {
         $tasks = array_column($tasks_notify, 'name');
         $mail->addAddress($user['email'], $user['name']);
         $mail->Subject = 'Уведомление от сервиса «Дела в порядке»';
-        $mail->Body = 'Уважаемый, ' . $user['name'] . '. У вас запланирована задача ' . implode(", ", $tasks) . ' на ' . $date;
-        $mail->AltBody = 'Уважаемый, ' . $user['name'] . '. У вас запланирована задача ' . implode(", ", $tasks) . ' на ' . $date;
+        $mail->Body = 'Уважаемый, ' . $user['name']
+                    . '. У вас запланирована задача ' . implode(", ", $tasks) . ' на ' . $date;
+        $mail->AltBody = 'Уважаемый, ' . $user['name']
+                    . '. У вас запланирована задача ' . implode(", ", $tasks) . ' на ' . $date;
         if (!$mail->send()) {
             echo 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
