@@ -1,0 +1,9 @@
+<?php
+
+$smtp = [
+    'username' => 'a01042aa5c584b',
+    'password' => 'b117676541b9f6',
+    'host' => 'smtp.mailtrap.io',
+    'port' => 2525,
+    'secure' => 'tls'
+];

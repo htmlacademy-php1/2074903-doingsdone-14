@@ -13,4 +13,4 @@ info.php
 adminer.php
 config/db.php
 composer.lock
-config/smtp_password.php
+config/smtp.php
