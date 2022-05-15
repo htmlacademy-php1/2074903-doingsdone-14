@@ -5,6 +5,7 @@
  *
  * @param object $con Our connect to MySQL database
  * @param int $user_id Our correct id of user who use our website right now
+ *
  * @return function array_or_error
  */
 function get_projects(object $con, $user_id)
@@ -28,39 +29,52 @@ function get_projects(object $con, $user_id)
  * @param int $today Our filter of today's tasks
  * @param int $tomorrow Our filter of tomorrow's tasks
  * @param int $overdue Our filter for overdue tasks
+ *
  * @return function array_or_error
  */
-function get_tasks(object $con, $project_id, $user_id, $search, $today, $tomorrow, $overdue)
-{
+function get_tasks(
+    object $con, $project_id, $user_id, $search, $today, $tomorrow, $overdue
+) {
     if (!empty($search)) {
-        $search = trim(filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS), " ");
-        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
-                    . "WHERE user_id = '$user_id' AND MATCH(name) AGAINST(?) ORDER BY dt_add DESC";
+        $search = trim(
+            filter_input(
+                INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS
+            ),
+            " "
+        );
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') "
+                    . "as dt_deadline, file FROM tasks WHERE user_id = '$user_id' "
+                    . "AND MATCH(name) AGAINST(?) ORDER BY dt_add DESC";
         $stmt = db_get_prepare_stmt($con, $sql, [$search]);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
     } elseif (!empty($project_id)) {
-        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
-                    . "WHERE user_id = '$user_id' AND project_id = '$project_id' ORDER BY dt_add DESC";
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') "
+                    . "as dt_deadline, file FROM tasks WHERE user_id = '$user_id' "
+                    . "AND project_id = '$project_id' ORDER BY dt_add DESC";
         $result = mysqli_query($con, $sql);
     } elseif (!empty($today)) {
         $date = date('Y-m-d', strtotime("now"));
-        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
-                    . "WHERE user_id = '$user_id' AND dt_deadline = '$date' ORDER BY dt_add DESC";
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') "
+                    . "as dt_deadline, file FROM tasks WHERE user_id = '$user_id' "
+                    . "AND dt_deadline = '$date' ORDER BY dt_add DESC";
         $result = mysqli_query($con, $sql);
     } elseif (!empty($tomorrow)) {
         $date = date('Y-m-d', strtotime("+1 day"));
-        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
-                    . "WHERE user_id = '$user_id' AND dt_deadline = '$date' ORDER BY dt_add DESC";
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') "
+                    . "as dt_deadline, file FROM tasks WHERE user_id = '$user_id' "
+                    . "AND dt_deadline = '$date' ORDER BY dt_add DESC";
         $result = mysqli_query($con, $sql);
     } elseif (!empty($overdue)) {
         $date = date('Y-m-d', strtotime("now"));
-        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
-                    . "WHERE user_id = '$user_id' AND dt_deadline < '$date' ORDER BY dt_add DESC";
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') "
+                    . "as dt_deadline, file FROM tasks WHERE user_id = '$user_id' "
+                    . "AND dt_deadline < '$date' ORDER BY dt_add DESC";
         $result = mysqli_query($con, $sql);
     } else {
-        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') as dt_deadline, file FROM tasks "
-                    . "WHERE user_id = '$user_id' ORDER BY dt_add DESC";
+        $sql = "SELECT id, name, status, DATE_FORMAT(dt_deadline, '%d.%m.%Y') "
+                    . "as dt_deadline, file FROM tasks WHERE user_id = '$user_id' "
+                    . "ORDER BY dt_add DESC";
         $result = mysqli_query($con, $sql);
     }
     return array_or_error($result);
@@ -70,6 +84,7 @@ function get_tasks(object $con, $project_id, $user_id, $search, $today, $tomorro
  * Create the array with existed emails from our database
  *
  * @param object $con Our connect to MySQL database
+ *
  * @return function array_or_error
  */
 function get_users(object $con)
@@ -100,20 +115,30 @@ function add_task(object $con, array $task_form, $user_id)
  *
  * @param object $con Our connect to MySQL database
  * @param array $user_form Info about new user
+ *
  * @return $result
  */
 function add_user(object $con, array $user_form)
 {
     $password = password_hash($user_form['password'], PASSWORD_DEFAULT);
     $sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?)';
-    $stmt = db_get_prepare_stmt($con, $sql, [$user_form['email'], $password, $user_form['name']]);
+    $stmt = db_get_prepare_stmt(
+        $con, $sql,
+        [
+            $user_form['email'],
+            $password,
+            $user_form['name']
+        ]
+    );
     return mysqli_stmt_execute($stmt);
 }
 
 /**
  * Give us the data of the user who logged in on our website
+ *
  * @param object $con Our connect to MySQL database
  * @param array $user_auth Our user date to auth on our website
+ *
  * @return funtion array_or_error
  */
 function get_user(object $con, array $user_auth)
@@ -130,6 +155,7 @@ function get_user(object $con, array $user_auth)
  * @param object $con Our connect to MySQL database
  * @param array $project_form Info about new project from users
  * @param int $user_id Our correct id of user who use our website right now
+ *
  * @return $result
  */
 function add_project(object $con, array $project_form, $user_id)
@@ -145,6 +171,7 @@ function add_project(object $con, array $project_form, $user_id)
  * @param object $con Our connect to MySQL database
  * @param int $task_id Our task which was marked as checked
  * @param int $is_checked The status of pushed task
+ *
  * @return redirect to index.php
  */
 function change_status_task(object $con, $task_id, $is_checked)
@@ -162,6 +189,7 @@ function change_status_task(object $con, $task_id, $is_checked)
  * Gives users to mail them notification about hot tasks
  *
  * @param object $con Our connect to MySQL database
+ *
  * @return function array_or_error
  */
 function get_users_notify(object $con)
@@ -177,11 +205,13 @@ function get_users_notify(object $con)
  * @param object $con Our connect to MySQL database
  * @param int $user_id ID of our concrete user
  * @param date $date Current date
+ *
  * @return list of tasks
  */
 function get_tasks_notify(object $con, int $user_id, $date)
 {
-    $sql = "SELECT name FROM taks WHERE status = 0 AND dt_deadline = '$date' AND user_id = '$user_id'";
+    $sql = "SELECT name FROM taks WHERE status = 0 "
+            . "AND dt_deadline = '$date' AND user_id = '$user_id'";
     $result = mysqli_query($con, $sql);
     return array_or_error($result)[0];
 }

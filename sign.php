@@ -26,11 +26,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     ];
 
-    $user_form = filter_input_array(INPUT_POST, [
-        'email' => FILTER_DEFAULT,
-        'password' => FILTER_DEFAULT,
-        'name' => FILTER_DEFAULT
-    ], true);
+    $user_form = filter_input_array(
+        INPUT_POST,
+        [
+            'email' => FILTER_DEFAULT,
+            'password' => FILTER_DEFAULT,
+            'name' => FILTER_DEFAULT
+        ],
+        true
+    );
 
     foreach ($user_form as $key => $value) {
         if (!empty($rules[$key])) {
@@ -46,9 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = array_filter($errors);
 
     if (count($errors)) {
-        $page_content = include_template('register.php', [
-            'user' => $user_form,
-            'errors' => $errors]);
+        $page_content = include_template(
+            'register.php',
+            [
+                'user' => $user_form,
+                'errors' => $errors
+            ]
+        );
     } else {
         $result = add_user($con, $user_form);
         if ($result) {
@@ -61,15 +69,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $page_content = include_template('register.php');
 }
 
-$navigation_content = include_template('navigation.php', [
-    'user' => [],
-    'projects' => $projects,
-    'project_id' => $project_id,
-    'content' => $page_content]);
+$navigation_content = include_template(
+    'navigation.php',
+    [
+        'user' => [],
+        'projects' => $projects,
+        'project_id' => $project_id,
+        'content' => $page_content
+    ]
+);
 
-$layout_content = include_template('layout.php', [
-    'user' => [],
-    'navigation' => $navigation_content,
-    'title' => 'Дела в порядке']);
+$layout_content = include_template(
+    'layout.php',
+    [
+        'user' => [],
+        'navigation' => $navigation_content,
+        'title' => 'Дела в порядке'
+    ]
+);
 
 print($layout_content);

@@ -13,16 +13,24 @@ if (empty($_SESSION['user'])) {
     $project_id = null;
     $projects = [];
 
-    $navigation_content = include_template('navigation.php', [
-        'user' => [],
-        'projects' => $projects,
-        'project_id' => $project_id,
-        'content' => $page_content]);
+    $navigation_content = include_template(
+        'navigation.php',
+        [
+            'user' => [],
+            'projects' => $projects,
+            'project_id' => $project_id,
+            'content' => $page_content
+        ]
+    );
 
-    $layout_content = include_template('layout.php', [
-        'user' => [],
-        'navigation' => $navigation_content,
-        'title' => 'Дела в порядке']);
+    $layout_content = include_template(
+        'layout.php',
+        [
+            'user' => [],
+            'navigation' => $navigation_content,
+            'title' => 'Дела в порядке'
+        ]
+    );
 } else {
     $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
     $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -35,30 +43,46 @@ if (empty($_SESSION['user'])) {
     $projects = get_projects($con, $user_id);
     $projects_ids = array_column($projects, 'id');
 
-    $tasks = get_tasks($con, $project_id, $user_id, $search, $today, $tomorrow, $overdue);
+    $tasks = get_tasks(
+        $con, $project_id, $user_id, $search, $today, $tomorrow, $overdue
+    );
 
     $checked = change_status_task($con, $task_id, $is_checked);
 
-    $page_content = check_tasks_for_project_or_search($project_id, $projects_ids, $tasks, $search);
+    $page_content = check_tasks_for_project_or_search(
+        $project_id, $projects_ids, $tasks, $search
+    );
 
     if (empty($page_content)) {
-        $page_content = include_template('main.php', [
-            'tasks' => $tasks,
-            'show_complete_tasks' => $show_complete_tasks,
-            'today' => $today,
-            'tomorrow' => $tomorrow,
-            'overdue' => $overdue]);
+        $page_content = include_template(
+            'main.php',
+            [
+                'tasks' => $tasks,
+                'show_complete_tasks' => $show_complete_tasks,
+                'today' => $today,
+                'tomorrow' => $tomorrow,
+                'overdue' => $overdue
+            ]
+        );
     }
-    $navigation_content = include_template('navigation.php', [
-        'user' => $_SESSION['user'],
-        'projects' => $projects,
-        'project_id' => $project_id,
-        'content' => $page_content]);
+    $navigation_content = include_template(
+        'navigation.php',
+        [
+            'user' => $_SESSION['user'],
+            'projects' => $projects,
+            'project_id' => $project_id,
+            'content' => $page_content
+        ]
+    );
 
-    $layout_content = include_template('layout.php', [
-        'user' => $_SESSION['user'],
-        'navigation' => $navigation_content,
-        'title' => 'Дела в порядке']);
+    $layout_content = include_template(
+        'layout.php',
+        [
+            'user' => $_SESSION['user'],
+            'navigation' => $navigation_content,
+            'title' => 'Дела в порядке'
+        ]
+    );
 }
 
 print($layout_content);
