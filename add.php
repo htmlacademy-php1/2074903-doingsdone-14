@@ -1,22 +1,42 @@
 <?php
-require_once('init.php');
-require_once('model.php');
-require_once('helpers.php');
-require_once('myfunction.php');
+
+require_once 'init.php';
+require_once 'model.php';
+require_once 'helpers.php';
+require_once 'myfunction.php';
 
 if (empty($_SESSION['user'])) {
     $page_content = include_template('guest.php');
-    $project_id = NULL;
+    $project_id = null;
     $projects = [];
+
+    $navigation_content = include_template(
+        'navigation.php',
+        [
+            'user' => [],
+            'projects' => $projects,
+            'project_id' => $project_id,
+            'content' => $page_content
+        ]
+    );
+
+    $layout_content = include_template(
+        'layout.php',
+        [
+            'user' => [],
+            'navigation' => $navigation_content,
+            'title' => 'Дела в порядке'
+        ]
+    );
 } else {
     $project_id = filter_input(INPUT_GET, 'project_id', FILTER_SANITIZE_NUMBER_INT);
-    $projects = get_projects($con, $id);
+    $projects = get_projects($con, $user_id);
     $projects_ids = array_column($projects, 'id');
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $required = ['name', 'project_id'];
-        $errors= [];
-        $rules =[
+        $errors = [];
+        $rules = [
             'name' => function ($value) {
                 return validate_name($value);
             },
@@ -25,7 +45,14 @@ if (empty($_SESSION['user'])) {
             }
         ];
 
-        $task_form = filter_input_array(INPUT_POST, ['name' => FILTER_DEFAULT, 'project_id' => FILTER_DEFAULT], true);
+        $task_form = filter_input_array(
+            INPUT_POST,
+            [
+                'name' => FILTER_DEFAULT,
+                'project_id' => FILTER_DEFAULT
+            ],
+            true
+        );
 
         foreach ($task_form as $key => $value) {
             if (!empty($rules[$key])) {
@@ -48,7 +75,7 @@ if (empty($_SESSION['user'])) {
                 $task_form['dt_deadline'] = $dt_deadline;
             }
         } else {
-            $task_form['dt_deadline'] = NULL;
+            $task_form['dt_deadline'] = null;
         }
 
         if (!empty($_FILES['file']['name'])) {
@@ -65,16 +92,20 @@ if (empty($_SESSION['user'])) {
                 $task['file'] = $file_name;
             }
         } else {
-            $task_form['file'] = NULL;
+            $task_form['file'] = null;
         }
 
         if (count($errors)) {
-            $page_content = include_template('add-task.php', [
-                'task' => $task_form,
-                'projects' => $projects,
-                'errors' => $errors]);
+            $page_content = include_template(
+                'add-task.php',
+                [
+                    'task' => $task_form,
+                    'projects' => $projects,
+                    'errors' => $errors
+                ]
+            );
         } else {
-            $result = add_task($con, $task_form, $id);
+            $result = add_task($con, $task_form, $user_id);
             if ($result) {
                 $task_id = mysqli_insert_id($con);
                 header("Location: index.php");
@@ -83,17 +114,24 @@ if (empty($_SESSION['user'])) {
     } else {
         $page_content = include_template('add-task.php', ['projects' => $projects]);
     }
+    $navigation_content = include_template(
+        'navigation.php',
+        [
+            'user' => $_SESSION['user'],
+            'projects' => $projects,
+            'project_id' => $project_id,
+            'content' => $page_content
+        ]
+    );
+
+    $layout_content = include_template(
+        'layout.php',
+        [
+            'user' => $_SESSION['user'],
+            'navigation' => $navigation_content,
+            'title' => 'Дела в порядке'
+        ]
+    );
 }
-
-$navigation_content = include_template('navigation.php', [
-    '_SESSION' => $_SESSION['user'],
-    'projects' => $projects,
-    'project_id' => $project_id,
-    'content' => $page_content]);
-
-$layout_content = include_template('layout.php', [
-    '_SESSION' => $_SESSION['user'],
-    'navigation' => $navigation_content,
-    'title' => 'Дела в порядке']);
 
 print($layout_content);

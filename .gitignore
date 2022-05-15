@@ -12,3 +12,5 @@ uploads/*
 info.php
 adminer.php
 config/db.php
+composer.lock
+config/smtp.php
