@@ -7,24 +7,29 @@
  *
  * @return bool $is_hot Shows true or false there are 24h or less before the task
  */
-function is_hot($task)
+function is_hot($task) : bool
 {
     if (!empty($task['dt_deadline']) and !$task['status']) {
         $task_ts = strtotime($task['dt_deadline']);
         $ts_diff = $task_ts - time();
         $hours = floor($ts_diff / 3600);
-        return ($hours <= 24);
+        if ($hours <= 24) {
+            return true;
+        } else {
+            return false;
+        }
     }
+    return false;
 }
 
 /**
  * In a request to the db, creates an array of the response or returns an error
  *
- * @param object $result response from our database to our request
+ * @param resource $result response from our database to our request
  *
- * @return function to exit or create array
+ * @return array|null from db
  */
-function array_or_error(object $result)
+function array_or_error(object $result) : array|null
 {
     if (!$result) {
         exit('Ошибка запроса');
@@ -42,11 +47,12 @@ function array_or_error(object $result)
  * @param array $tasks our array with tasks for $project_id
  * @param string $search Our search request to find tasks
  *
- * @return string about error with code 404
+ * @return string|null about error with code 404
  */
 function check_tasks_for_project_or_search(
     $project_id, $projects_ids, array $tasks, $search
-) {
+) : string|null
+{
     if (!empty($search) and empty($tasks)) {
         return 'Ничего не найдено по вашему запросу';
     } elseif (!empty($project_id)) {
@@ -54,6 +60,8 @@ function check_tasks_for_project_or_search(
             http_response_code(404);
             return 'Ошибка 404. Страница, которую Вы ищете, не может быть найдена';
         }
+    } else {
+        return null;
     }
 }
 
@@ -63,9 +71,9 @@ function check_tasks_for_project_or_search(
  * @param int $project_id - our id to check
  * @param array $allowed_list - an id column of our exist projects
  *
- * @return string about error
+ * @return string|null about error
  */
-function validate_project($project_id, $allowed_list)
+function validate_project($project_id, $allowed_list) : string|null
 {
     if (!in_array($project_id, $allowed_list)) {
         return 'Указан несуществующий проект';
@@ -78,9 +86,9 @@ function validate_project($project_id, $allowed_list)
  *
  * @param string $name - the name of task or user
  *
- * @return string about error
+ * @return string|null about error
  */
-function validate_name($name)
+function validate_name($name) : string|null
 {
     if (!$name) {
         return 'Название/имя не может быть пустым';
@@ -93,9 +101,9 @@ function validate_name($name)
  *
  * @param string $date - sent date of deadline
  *
- * @return string about errors
+ * @return string|null about errors
  */
-function check_date($date)
+function check_date($date) : string|null
 {
     if (!is_date_valid($date)) {
         return 'Указан неверный формат даты';
@@ -105,18 +113,22 @@ function check_date($date)
     if (strtotime($deadline) < time()) {
         return 'Указана устаревшая дата';
     }
+    return null;
 }
 
 /**
- * Return sent value from our from to add tasks
+ * Return sent value from our form to add tasks
  *
  * @param string $name - name of sent value
  *
- * @return string sent value
+ * @return string|null sent value
  */
-function get_post_value($name)
+function get_post_value($name) : string|null
 {
-    return filter_input(INPUT_POST, $name);
+    if (!empty($name)) {
+        return filter_input(INPUT_POST, $name);
+    }
+    return null;
 }
 
 /**
@@ -125,9 +137,9 @@ function get_post_value($name)
  * @param $name - our file
  * @param $max_size_limit our max size for upload files
  *
- * @return string about error
+ * @return string|null about error
  */
-function validate_filesize($name, $max_size_limit)
+function validate_filesize($name, $max_size_limit) : string|null
 {
     if (filesize($name) > $max_size_limit) {
         return 'Размер файла превышает допустимый';
@@ -138,12 +150,12 @@ function validate_filesize($name, $max_size_limit)
 /**
  * Check to exist sent user email in our form to sign up
  *
- * @param $email - our email to check
+ * @param resource $email - our email to check
  * @param array $emails - an emails column of our users in database
  *
- * @return string about error
+ * @return string|null about error
  */
-function validate_email($email, $emails)
+function validate_email($email, $emails) : string|null
 {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return 'Введен некорректный e-mail';
@@ -161,9 +173,9 @@ function validate_email($email, $emails)
  * @param int $min min number of symbols
  * @param int $max max number of symbols
  *
- * @return string about error
+ * @return string|null about error
  */
-function validate_length($value, $min, $max)
+function validate_length($value, $min, $max) : string|null
 {
     $length = strlen($value);
     if ($length < $min or $length > $max) {
@@ -178,9 +190,9 @@ function validate_length($value, $min, $max)
  * @param array $projects Projects which current user has
  * @param array $project_form New project which current user tries to create
  *
- * @return boolean $same_name exist or not this name of project
+ * @return bool $same_name exist or not this name of project
  */
-function check_name_project(array $projects, array $project_form)
+function check_name_project(array $projects, array $project_form) : bool
 {
     $project_name = mb_strtolower($project_form['name']);
     foreach ($projects as $project) {

@@ -6,9 +6,9 @@
  * @param object $con Our connect to MySQL database
  * @param int $user_id Our correct id of user who use our website right now
  *
- * @return function array_or_error
+ * @return mixed array_or_error
  */
-function get_projects(object $con, $user_id)
+function get_projects(object $con, $user_id) : mixed
 {
     $sql = "SELECT p.id, p.name, COUNT(t.name) AS count "
                 . "FROM projects p "
@@ -30,11 +30,12 @@ function get_projects(object $con, $user_id)
  * @param int $tomorrow Our filter of tomorrow's tasks
  * @param int $overdue Our filter for overdue tasks
  *
- * @return function array_or_error
+ * @return mixed array_or_error
  */
 function get_tasks(
     object $con, $project_id, $user_id, $search, $today, $tomorrow, $overdue
-) {
+) : mixed
+{
     if (!empty($search)) {
         $search = trim(
             filter_input(
@@ -85,9 +86,9 @@ function get_tasks(
  *
  * @param object $con Our connect to MySQL database
  *
- * @return function array_or_error
+ * @return mixed array_or_error
  */
-function get_users(object $con)
+function get_users(object $con) : mixed
 {
     $sql = 'SELECT * FROM users';
     $result = mysqli_query($con, $sql);
@@ -100,9 +101,10 @@ function get_users(object $con)
  * @param object $con Our connect to MySQL database
  * @param array $task_form Info about new task from users
  * @param int $user_id Our correct id of user who use our website right now
- * @return $result
+ *
+ * @return mixed
  */
-function add_task(object $con, array $task_form, $user_id)
+function add_task(object $con, array $task_form, $user_id) : mixed
 {
     $sql = "INSERT INTO tasks (dt_add, user_id, name, project_id, dt_deadline, file, status) "
             . "VALUES (NOW(), '$user_id', ?, ?, ?, ?, 0)";
@@ -116,9 +118,9 @@ function add_task(object $con, array $task_form, $user_id)
  * @param object $con Our connect to MySQL database
  * @param array $user_form Info about new user
  *
- * @return $result
+ * @return mixed
  */
-function add_user(object $con, array $user_form)
+function add_user(object $con, array $user_form) : mixed
 {
     $password = password_hash($user_form['password'], PASSWORD_DEFAULT);
     $sql = 'INSERT INTO users (email, password, name) VALUES (?, ?, ?)';
@@ -139,9 +141,9 @@ function add_user(object $con, array $user_form)
  * @param object $con Our connect to MySQL database
  * @param array $user_auth Our user date to auth on our website
  *
- * @return funtion array_or_error
+ * @return mixed array_or_error
  */
-function get_user(object $con, array $user_auth)
+function get_user(object $con, array $user_auth) : mixed
 {
     $email = mysqli_real_escape_string($con, $user_auth['email']);
     $sql = "SELECT * FROM users WHERE email = '$email'";
@@ -156,9 +158,9 @@ function get_user(object $con, array $user_auth)
  * @param array $project_form Info about new project from users
  * @param int $user_id Our correct id of user who use our website right now
  *
- * @return $result
+ * @return mixed
  */
-function add_project(object $con, array $project_form, $user_id)
+function add_project(object $con, array $project_form, $user_id) : mixed
 {
     $sql = "INSERT INTO projects (user_id, name) VALUES ('$user_id', ?)";
     $stmt = db_get_prepare_stmt($con, $sql, $project_form);
@@ -172,9 +174,9 @@ function add_project(object $con, array $project_form, $user_id)
  * @param int $task_id Our task which was marked as checked
  * @param int $is_checked The status of pushed task
  *
- * @return redirect to index.php
+ * @return void redirect to index.php
  */
-function change_status_task(object $con, $task_id, $is_checked)
+function change_status_task(object $con, $task_id, $is_checked) : void
 {
     if ($task_id) {
         $sql = "UPDATE tasks SET status = '$is_checked' WHERE id = '$task_id'";
@@ -190,9 +192,9 @@ function change_status_task(object $con, $task_id, $is_checked)
  *
  * @param object $con Our connect to MySQL database
  *
- * @return function array_or_error
+ * @return mixed array_or_error
  */
-function get_users_notify(object $con)
+function get_users_notify(object $con) : mixed
 {
     $sql = "SELECT id, name, email FROM users";
     $result = mysqli_query($con, $sql);
@@ -204,11 +206,11 @@ function get_users_notify(object $con)
  *
  * @param object $con Our connect to MySQL database
  * @param int $user_id ID of our concrete user
- * @param date $date Current date
+ * @param timestamp $date Current date
  *
- * @return list of tasks
+ * @return mixed list of tasks
  */
-function get_tasks_notify(object $con, int $user_id, $date)
+function get_tasks_notify(object $con, int $user_id, $date) : mixed
 {
     $sql = "SELECT name FROM tasks WHERE status = 0 "
             . "AND dt_deadline = '$date' AND user_id = '$user_id'";

@@ -29,7 +29,7 @@ CREATE TABLE tasks (
     FOREIGN KEY (project_id) REFERENCES projects(id),
     name VARCHAR(255),
     dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    dt_deadline TIMESTAMP DEFAULT NULL,
+    dt_deadline TIMESTAMP NULL,
     status BOOLEAN DEFAULT FALSE,
     file VARCHAR(255) DEFAULT NULL
 );
